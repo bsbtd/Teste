@@ -1,0 +1,1033 @@
+@component-name = "portal-wcm"
+definition {
+
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.main.component.name = "Content Pages";
+
+	setUp {
+		TestCase.setUpPortalInstance();
+
+		User.firstLoginPG();
+
+		JSONGroup.addGroup(groupName = "Test Site Name");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "Content Page Name",
+			type = "content");
+	}
+
+	tearDown {
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+		else {
+			JSONGroup.deleteGroupByName(groupName = "Test Site Name");
+		}
+	}
+
+	@description = "This is a test for LPS-101330. A user should be able to add a video fragment and the video should play."
+	@priority = "5"
+	test AddContentPageWithVideoFragment {
+		property portal.acceptance = "false";
+
+		// Assert the Home page is a content page in the default site
+
+		AssertVisible(locator1 = "Icon#EDIT_PENCIL");
+
+		ContentPagesNavigator.openEditContentPage(
+			pageName = "Content Page Name",
+			siteName = "Test Site Name");
+
+		PageEditor.addFragment(
+			collectionName = "Basic Components",
+			fragmentName = "Video");
+
+		PageEditor.gotoConfiguration(fragmentName = "Video");
+
+		PageEditor.addVideoFragmentURL(videoLink = "https://www.youtube.com/watch?v=2EPZxIC5ogU");
+
+		PageEditor.clickPublish();
+
+		ContentPagesNavigator.openViewContentPage(
+			pageName = "Content Page Name",
+			siteName = "Test Site Name");
+
+		YoutubePortlet.assertVideoTitle(videoTitle = "Life at Liferay - A Look into Liferay Culture");
+	}
+
+	@description = "This is a use case for LPS-86141. The fragment should be added to all cells of the Collection Display when add it to one cell."
+	@priority = "5"
+	test AddFragmentToOneCellOfCollectionDisplay {
+		task ("Add three Web Content Articles based on Basic Web Content") {
+			for (var entryTitle : list "First Web Content,Second Web Content,Third Web Content") {
+				JSONWebcontent.addWebContent(
+					content = "Web Content Content",
+					groupName = "Test Site Name",
+					title = "${entryTitle}");
+			}
+		}
+
+		task ("Add a dynamic Collections and select Web Content Article as Asset Entry Type") {
+			JSONAssetlist.addDynamicAssetListEntry(
+				groupName = "Test Site Name",
+				title = "Dynamic Collection");
+
+			AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+			AssetListsAdmin.editAssetList(assetListTitle = "Dynamic Collection");
+
+			AssetListsAdmin.configureAssetEntryType(selectedAsset = "Web Content Article");
+		}
+
+		task ("Add a Collection Display to page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-name");
+
+			ContentPages.clickPencil();
+
+			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+		}
+
+		task ("Select the dynamic collection") {
+			PageEditor.editCollectionDisplay(
+				assetListName = "Dynamic Collection",
+				fragmentName = "Collection Display");
+		}
+
+		task ("Add a Button fragment to the first cell") {
+			PageEditor.gotoTab(tabName = "Fragments");
+
+			PageEditor.expandFragmentCollection(collectionName = "Basic Components");
+
+			DragAndDrop.javaScriptDragAndDropToObject(
+				key_entryTitle = "Third Web Content",
+				key_fragmentName = "Button",
+				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator2 = "PageEditor#COLLECTION_CELL",
+				value1 = "");
+
+			PageEditor.waitForAutoSave();
+
+			AssertElementPresent(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor')]//li[contains(.,'Button')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT");
+		}
+
+		task ("Assert the Button fragment is also added to other cells") {
+			AssertElementPresent(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor')]//li[contains(.,'Button')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "2",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT");
+
+			AssertElementPresent(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor')]//li[contains(.,'Button')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "3",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT");
+		}
+	}
+
+	@description = "This is a use case for LPS-86141. The collections with multiple asset type are unavailable to the Collection Display."
+	@priority = "4"
+	test CollectionsWithMultipleAssetTypeAreUnavailableToCollectionDisplay {
+		task ("Add a Web Content Article based on Basic Web Content and a Blogs Entry") {
+			JSONWebcontent.addWebContent(
+				content = "Web Content Content",
+				groupName = "Test Site Name",
+				title = "Web Content Title");
+
+			JSONBlog.addEntry(
+				entryContent = "Blogs Entry Content",
+				entryTitle = "Blogs Entry Title",
+				groupName = "Test Site Name");
+		}
+
+		task ("Add a dynamic Collections and select Any as Asset Entry Type") {
+			JSONAssetlist.addDynamicAssetListEntry(
+				groupName = "Test Site Name",
+				title = "Dynamic Collection");
+
+			AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+			AssetListsAdmin.editAssetList(assetListTitle = "Dynamic Collection");
+
+			AssetListsAdmin.configureAssetEntryType(selectedAsset = "Any");
+		}
+
+		task ("Add a manual Collections and select the Web Content Article and Blogs entry") {
+			JSONAssetlist.addManualAssetListEntry(
+				groupName = "Test Site Name",
+				title = "Manual Collection");
+
+			AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+			AssetListsAdmin.selectAsset(
+				assetListName = "Manual Collection",
+				assetName = "Web Content Title",
+				assetType = "Basic Web Content");
+
+			AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+			AssetListsAdmin.selectAsset(
+				assetListName = "Manual Collection",
+				assetName = "Blogs Entry Title",
+				assetType = "Blogs Entry");
+		}
+
+		task ("Add a Collection Display to page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-name");
+
+			ContentPages.clickPencil();
+
+			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+		}
+
+		task ("Assert both collections are unavailable to Collection Display") {
+			Click.clickNoMouseOver(
+				key_elementType = "Collection Display",
+				locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+
+			Click(locator1 = "PageEditor#FRAGMENT_BODY_FLOATING_TOOLBAR_PLUS_BUTTON");
+
+			SelectFrame(locator1 = "IFrame#DIALOG");
+
+			NavItem.click(navItem = "Collections");
+
+			for (var assetListName : list "Dynamic Collection,Manual Collection") {
+				LexiconCard.viewCardNotPresent(card = "${assetListName}");
+			}
+		}
+	}
+
+	@description = "Given a content page with a configured Content fragment, when the content is deleted the fragment should not be visible in view mode and a message should be shown in page editor."
+	@priority = "4"
+	test DeletedContentInContentDisplayFragmentIsNotVisible {
+		JSONWebcontent.addWebContent(
+			content = "WC WebContent Content",
+			groupName = "Test Site Name",
+			title = "WebContent Title");
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Page Name");
+
+		PageEditor.addContentDisplay(fragmentName = "Content");
+
+		PageEditor.editContentDisplay(
+			fragmentName = "Content",
+			webcontent = "true",
+			webContentContent = "WC WebContent Content",
+			webContentTitle = "WebContent Title");
+
+		Button.clickPublish();
+
+		JSONWebcontent.deleteWebContent(
+			groupName = "Test Site Name",
+			title = "WebContent Title");
+
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Test Site Name");
+
+		task ("Assert the fragment is not visible in the site page") {
+			AssertElementNotPresent(
+				key_pageName = "Test Page Name",
+				locator1 = "PageEditor#CONTENT_PAGE_TEXT_CONTENT");
+		}
+
+		ContentPages.clickPencil();
+
+		task ("Assert there is a message in page editor informing the page author that the content is no longer available") {
+			AssertVisible(
+				key_fragmentName = "Content",
+				key_messageIfo = "The selected content is no longer available. Please select another.",
+				locator1 = "Fragment#MESSAGE_INFO");
+		}
+	}
+
+	@description = "This case ensures that a user can map a blogs content field to a fragment via the content display."
+	@priority = "5"
+	test MapBlogContentViaContentDisplay {
+		property testray.component.names = "Content Pages,Item Selector";
+
+		BlogsNavigator.openBlogsAdmin(siteURLKey = "test-site-name");
+
+		Blogs.addEntry(
+			entryContent = "This content maps from blog content",
+			entryTitle = "Blogs Entry Title");
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Page Name");
+
+		PageEditor.addContentDisplay(fragmentName = "Content");
+
+		PageEditor.editContentDisplay(
+			blogs = "true",
+			entryContent = "This content maps from blog content",
+			entryTitle = "Blogs Entry Title",
+			fragmentName = "Content");
+
+		Button.clickPublish();
+
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Test Site Name");
+
+		AssertTextEquals(
+			locator1 = "PageEditor#CONTENT_PAGE_TEXT_CONTENT",
+			value1 = "This content maps from blog content");
+	}
+
+	@description = "This is a use case for LPS-86141. The mapped content of asset entries in selected collection should be respectively shown in each cell of the Collection Display when map content to editable field of one fragment in one cell."
+	@priority = "4"
+	test MapContentToEditableFieldOfFragmentInCollectionDisplay {
+		task ("Add three Web Content Articles based on Basic Web Content") {
+			for (var entryTitle : list "First Web Content,Second Web Content,Third Web Content") {
+				JSONWebcontent.addWebContent(
+					content = "Web Content Content",
+					groupName = "Test Site Name",
+					title = "${entryTitle}");
+			}
+		}
+
+		task ("Add a dynamic Collections and select Web Content Article as Asset Entry Type") {
+			JSONAssetlist.addDynamicAssetListEntry(
+				groupName = "Test Site Name",
+				title = "Dynamic Collection");
+
+			AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+			AssetListsAdmin.editAssetList(assetListTitle = "Dynamic Collection");
+
+			AssetListsAdmin.configureAssetEntryType(selectedAsset = "Web Content Article");
+		}
+
+		task ("Add a Collection Display to page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-name");
+
+			ContentPages.clickPencil();
+
+			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+		}
+
+		task ("Select the dynamic collection") {
+			PageEditor.editCollectionDisplay(
+				assetListName = "Dynamic Collection",
+				fragmentName = "Collection Display");
+		}
+
+		task ("Add a Heading fragment to the first cell") {
+			PageEditor.gotoTab(tabName = "Fragments");
+
+			PageEditor.expandFragmentCollection(collectionName = "Basic Components");
+
+			DragAndDrop.javaScriptDragAndDropToObject(
+				key_entryTitle = "Third Web Content",
+				key_fragmentName = "Heading",
+				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator2 = "PageEditor#COLLECTION_CELL",
+				value1 = "");
+
+			PageEditor.waitForAutoSave();
+		}
+
+		task ("Map Title of collection items to editable field") {
+			Click(locator1 = "PageEditor#CONTENT_PAGE_DISABLED_HEADER");
+
+			Click.clickNoWaitForVisible(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor')]//li[contains(.,'Heading')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT");
+
+			Click(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor__topper') and contains(.,'Heading')]//*[contains(@data-lfr-editable-id,'element-text')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT");
+
+			Click(locator1 = "PageEditor#EDITABLE_FIELD_TOOLBAR_MAP_BUTTON");
+
+			Pause(locator1 = "3000");
+
+			Select(
+				key_fieldLabel = "Field",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "Title");
+
+			PageEditor.waitForAutoSave();
+
+			AssertSelectedLabel(
+				key_fieldLabel = "Field",
+				locator1 = "Select#GENERIC_SELECT_FIELD",
+				value1 = "Title");
+		}
+
+		task ("Assert the title of three Web Content Articles are respectively shown in each cell") {
+			AssertTextEquals(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor__topper') and contains(.,'Heading')]//*[contains(@data-lfr-editable-id,'element-text')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT",
+				value1 = "Third Web Content");
+
+			AssertTextEquals(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor__topper') and contains(.,'Heading')]//*[contains(@data-lfr-editable-id,'element-text')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "2",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT",
+				value1 = "Second Web Content");
+
+			AssertTextEquals(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor__topper') and contains(.,'Heading')]//*[contains(@data-lfr-editable-id,'element-text')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "3",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT",
+				value1 = "First Web Content");
+		}
+	}
+
+	@description = "This case ensures that a user can map an image to a fragment via the content display."
+	@priority = "5"
+	test MapImageViaContentDisplay {
+		DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "test-site-name");
+
+		DMDocument.addCP(
+			dmDocumentDescription = "DM Document Description",
+			dmDocumentFile = "Document_1.jpg",
+			dmDocumentTitle = "Document_1.jpg");
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Page Name");
+
+		PageEditor.addContentDisplay(fragmentName = "Content");
+
+		PageEditor.editContentDisplay(
+			documentandmedia = "true",
+			fragmentName = "Content",
+			imageFileName = "Document_1.jpg");
+
+		Button.clickPublish();
+
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Test Site Name");
+
+		AssertVisible(
+			key_imageFileName = "Document_1.jpg",
+			locator1 = "PageEditor#CONTENT_PAGE_IMAGE_CONTENT");
+	}
+
+	@description = "This case ensures that a user can map the content field from web content to a fragment via the content display."
+	@priority = "5"
+	test MapWebContentContentViaContentDisplay {
+		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
+
+		WebContentNavigator.gotoAddCP();
+
+		WebContent.addCP(
+			webContentContent = "This content maps from web content",
+			webContentTitle = "Webcontent Title");
+
+		PortletEntry.publish();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Page Name");
+
+		PageEditor.addContentDisplay(fragmentName = "Content");
+
+		PageEditor.editContentDisplay(
+			fragmentName = "Content",
+			webcontent = "true",
+			webContentContent = "This content maps from web content",
+			webContentTitle = "Webcontent Title");
+
+		Button.clickPublish();
+
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Test Site Name");
+
+		AssertTextEquals.assertPartialTextAceEditor(
+			locator1 = "PageEditor#CONTENT_PAGE_WEB_CONTENT_CONTENT",
+			value1 = "This content maps from web content");
+	}
+
+	@description = "This is a test for LPS-101249. Can only select Documents and Media when set itemType to FileEntry."
+	@priority = "3"
+	test OnlySelectDocumentsAndMediaViaFragmentWhenItemTypeIsFileEntry {
+		task ("Add a WC based on Basic Web Content") {
+			JSONWebcontent.addWebContent(
+				content = "Web Content Content",
+				description = "Web Content Description",
+				groupName = "Test Site Name",
+				title = "Web Content Title");
+		}
+
+		task ("Add a blog") {
+			JSONBlog.addEntry(
+				entryContent = "Blogs Entry Content",
+				entryTitle = "Blogs Entry Title",
+				groupName = "Test Site Name");
+		}
+
+		task ("Add a document with an image") {
+			DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "test-site-name");
+
+			DMDocument.addCP(
+				dmDocumentDescription = "DM Document Description",
+				dmDocumentFile = "Document_1.jpg",
+				dmDocumentTitle = "DM Document Title");
+		}
+
+		task ("Import test fragments from dependencies folder") {
+			FragmentsAdminNavigator.openFragmentsAdmin(siteURLKey = "test-site-name");
+
+			FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "display-collection-name.zip");
+		}
+
+		task ("Add new fragment to content page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-name");
+
+			ContentPages.clickPencil();
+
+			PageEditor.addFragment(
+				collectionName = "imported",
+				fragmentName = "Documents and Media");
+		}
+
+		task ("Open select popup") {
+			PageEditor.gotoSelectPanel(fragmentName = "Documents and Media");
+		}
+
+		task ("Assert only Documents and Media entry shown") {
+			AssertElementPresent(
+				key_card = "DM Document Title",
+				locator1 = "LexiconCard#CARD");
+
+			AssertElementNotPresent(
+				key_navItem = "Web Content",
+				locator1 = "NavBar#NAV_ITEM_LINK");
+
+			AssertElementNotPresent(
+				key_navItem = "Blogs",
+				locator1 = "NavBar#NAV_ITEM_LINK");
+		}
+
+		task ("Assert fragment display correctly") {
+			LexiconCard.clickCard(card = "DM Document Title");
+
+			AssertTextEquals(
+				locator1 = "//div[contains(@class,'fragment_dm')]",
+				value1 = "DM Document Title");
+		}
+	}
+
+	@description = "This is a test for LPS-101249. Can only select web content articles created with a specific structure when set itemSubtype."
+	@priority = "3"
+	test OnlySelectWebContentBasedOnCustomStructureViaFragmentWhenSetItemSubtype {
+		property test.name.skip.portal.instance = "ContentPagesWithContributedFragments#OnlySelectWebContentBasedOnCustomStructureViaFragmentWhenSetItemSubtype";
+
+		task ("Add a WC based on Basic Web Content") {
+			JSONWebcontent.addWebContent(
+				content = "Web Content Content",
+				description = "Web Content Description",
+				groupName = "Test Site Name",
+				title = "Basic Web Content Title");
+		}
+
+		task ("Disable autogenerate structure key") {
+			ProductMenu.gotoPortlet(
+				category = "Configuration",
+				panel = "Control Panel",
+				portlet = "System Settings");
+
+			SystemSettings.gotoConfiguration(
+				configurationCategory = "Web Content",
+				configurationName = "Administration",
+				configurationScope = "System Scope");
+
+			FormFields.disableCheckbox(fieldName = "Autogenerate Structure Key");
+
+			PortletEntry.save();
+		}
+
+		task ("Add a structure with Text field") {
+			WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
+
+			NavItem.gotoStructures();
+
+			WebContentStructures.addCP(
+				structureDescription = "WC Structure Description",
+				structureKey = "STRUCTURE-TEXT",
+				structureName = "WC Structure Name");
+
+			DynamicDataMapping.addField(
+				field = "Text",
+				fieldFieldLabel = "Text",
+				fieldName = "Text");
+
+			WebContentStructures.saveCP(structureName = "WC Structure Name");
+		}
+
+		task ("Add a template for new structure") {
+			WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
+
+			NavItem.gotoTemplates();
+
+			WebContentTemplates.addCP(
+				structureName = "WC Structure Name",
+				templateDescription = "WC Template Description",
+				templateFieldNames = "Text",
+				templateName = "WC Template Name");
+		}
+
+		task ("Add a WC based on structure with Text field") {
+			WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
+
+			WebContentNavigator.gotoAddWithStructureCP(structureName = "WC Structure Name");
+
+			WebContent.addWithStructureCP(
+				description = "Web Content Description",
+				structureName = "WC Structure Name",
+				templateName = "WC Template Name",
+				webContentText = "Web Content Text",
+				webContentTitle = "Web Content With Text Title");
+
+			PortletEntry.publish();
+
+			WebContent.viewTitle(webContentTitle = "Web Content With Text Title");
+		}
+
+		task ("Import test fragments from dependencies folder") {
+			FragmentsAdminNavigator.openFragmentsAdmin(siteURLKey = "test-site-name");
+
+			FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "display-collection-name.zip");
+		}
+
+		task ("Add new fragment to content page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-name");
+
+			ContentPages.clickPencil();
+
+			PageEditor.addFragment(
+				collectionName = "imported",
+				fragmentName = "Web Content With Text");
+		}
+
+		task ("Open select popup") {
+			PageEditor.gotoSelectPanel(fragmentName = "Web Content With Text");
+		}
+
+		task ("Assert only WC with text field shown in popup") {
+			AssertElementNotPresent(
+				key_listEntry = "Basic Web Content Title",
+				locator1 = "LexiconList#LIST_ENTRY_TITLE");
+
+			AssertElementPresent(
+				key_listEntry = "Web Content With Text Title",
+				locator1 = "LexiconList#LIST_ENTRY_TITLE");
+		}
+
+		task ("Assert fragment display correctly") {
+			AssertClick(
+				key_listEntry = "Web Content With Text Title",
+				locator1 = "LexiconList#LIST_ENTRY_TITLE",
+				value1 = "Web Content With Text Title");
+
+			AssertTextEquals(
+				locator1 = "//div[contains(@class,'fragment_wctext')]",
+				value1 = "Web Content With Text Title Web Content Description Web Content Text");
+		}
+	}
+
+	@description = "This is a test for LPS-101249. Can only select web content articles when set itemType to JournalArticle"
+	@priority = "5"
+	test OnlySelectWebContentViaFragmentWhenItemTypeIsJournalArticle {
+		task ("Add a WC based on Basic Web Content") {
+			JSONWebcontent.addWebContent(
+				content = "Web Content Content",
+				description = "Web Content Description",
+				groupName = "Test Site Name",
+				title = "Web Content Title");
+		}
+
+		task ("Add a blog") {
+			Navigator.openSiteURL(siteName = "Test Site Name");
+
+			JSONBlog.addEntry(
+				entryContent = "Blogs Entry Content",
+				entryTitle = "Blogs Entry Title",
+				groupName = "Test Site Name");
+		}
+
+		task ("Add a document") {
+			JSONDocument.addFile(
+				dmDocumentDescription = "DM Document Description",
+				dmDocumentTitle = "DM Document Title",
+				groupName = "Test Site Name");
+		}
+
+		task ("Import test fragments from dependencies folder") {
+			FragmentsAdminNavigator.openFragmentsAdmin(siteURLKey = "test-site-name");
+
+			FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "display-collection-name.zip");
+		}
+
+		task ("Add new fragment to content page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-name");
+
+			ContentPages.clickPencil();
+
+			PageEditor.addFragment(
+				collectionName = "imported",
+				fragmentName = "Web Content");
+		}
+
+		task ("Open select popup") {
+			PageEditor.gotoSelectPanel(fragmentName = "Web Content");
+		}
+
+		task ("Assert only Web Content entry shown") {
+			AssertElementPresent(
+				key_listEntry = "Web Content Title",
+				locator1 = "LexiconList#LIST_ENTRY_TITLE");
+
+			AssertElementNotPresent(
+				key_navItem = "Documents and Media",
+				locator1 = "NavBar#NAV_ITEM_LINK");
+
+			AssertElementNotPresent(
+				key_navItem = "Blogs",
+				locator1 = "NavBar#NAV_ITEM_LINK");
+		}
+
+		task ("Assert fragment display correctly") {
+			AssertClick(
+				key_listEntry = "Web Content Title",
+				locator1 = "LexiconList#LIST_ENTRY_TITLE",
+				value1 = "Web Content Title");
+
+			AssertTextEquals(
+				locator1 = "//div[contains(@class,'fragment_wc')]",
+				value1 = "Web Content Title Web Content Description Web Content Content");
+		}
+	}
+
+	@description = "This is a use case for LPS-86141. The changes will be propagated to others cells when edit inline content of fragment in one cell."
+	@priority = "4"
+	test PropagteChangesOfInlineContentToOtherCellsOfCollectionDisplay {
+		task ("Add three documents") {
+			for (var entryTitle : list "First Document,Second Document,Third Document") {
+				JSONDocument.addFile(
+					dmDocumentDescription = "DM Description",
+					dmDocumentTitle = "${entryTitle}",
+					groupName = "Test Site Name");
+			}
+		}
+
+		task ("Add a dynamic Collections and select Document as Asset Entry Type") {
+			JSONAssetlist.addDynamicAssetListEntry(
+				groupName = "Test Site Name",
+				title = "Dynamic Collection");
+
+			AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+			AssetListsAdmin.editAssetList(assetListTitle = "Dynamic Collection");
+
+			AssetListsAdmin.configureAssetEntryType(selectedAsset = "Document");
+		}
+
+		task ("Add a Collection Display to page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-name");
+
+			ContentPages.clickPencil();
+
+			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+		}
+
+		task ("Select the dynamic collection and 3 Columns") {
+			PageEditor.editCollectionDisplay(
+				assetListName = "Dynamic Collection",
+				fragmentName = "Collection Display",
+				layout = "3 Columns");
+		}
+
+		task ("Add a Heading fragment to the first cell") {
+			PageEditor.gotoTab(tabName = "Fragments");
+
+			PageEditor.expandFragmentCollection(collectionName = "Basic Components");
+
+			DragAndDrop.javaScriptDragAndDropToObject(
+				key_entryTitle = "Third Document",
+				key_fragmentName = "Heading",
+				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator2 = "PageEditor#COLLECTION_CELL",
+				value1 = "");
+
+			PageEditor.waitForAutoSave();
+		}
+
+		task ("Edit inline Content of Heading in the first column") {
+			Click(locator1 = "PageEditor#CONTENT_PAGE_DISABLED_HEADER");
+
+			Click.clickNoWaitForVisible(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor')]//li[contains(.,'Heading')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT");
+
+			Click(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor__topper') and contains(.,'Heading')]//*[contains(@data-lfr-editable-id,'element-text')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT");
+
+			Click(locator1 = "PageEditor#EDITABLE_FIELD_TOOLBAR_EDIT_BUTTON");
+
+			Type(
+				id = "element-text",
+				key_fragmentName = "Heading",
+				locator1 = "Fragment#CONTRIBUTED_FRAGMENT_EDITABLE_FIELD_CK_EDITOR",
+				value1 = "Modified Text");
+
+			PageEditor.waitForAutoSave();
+
+			Click(locator1 = "PageEditor#CONTENT_PAGE_DISABLED_HEADER");
+
+			AssertTextEquals(
+				key_colPosition = "1",
+				key_element = "//div[contains(@class,'page-editor__topper') and contains(.,'Heading')]//*[contains(@data-lfr-editable-id,'element-text')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT",
+				value1 = "Modified Text");
+		}
+
+		task ("Assert propagate changes of inline content to other cells") {
+			AssertTextEquals(
+				key_colPosition = "2",
+				key_element = "//div[contains(@class,'page-editor__topper') and contains(.,'Heading')]//*[contains(@data-lfr-editable-id,'element-text')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT",
+				value1 = "Modified Text");
+
+			AssertTextEquals(
+				key_colPosition = "3",
+				key_element = "//div[contains(@class,'page-editor__topper') and contains(.,'Heading')]//*[contains(@data-lfr-editable-id,'element-text')]",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_CELL_NESTED_ELEMENT",
+				value1 = "Modified Text");
+		}
+	}
+
+	@description = "This is a test for LPS-101248. Can select any custom web content template as a "Template" for web content selected in content fragment."
+	@priority = "5"
+	test SelectCustomWebContentTemplateViaContentDisplay {
+		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
+
+		WebContentNavigator.gotoAddCP();
+
+		WebContent.addCP(
+			webContentContent = "This content maps from web content",
+			webContentTitle = "Webcontent Title");
+
+		PortletEntry.publish();
+
+		WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");
+
+		NavItem.gotoTemplates();
+
+		WebContentTemplates.addCP(
+			generalVariables = "Site ID",
+			structureName = "Basic Web Content",
+			templateDescription = "WC Template Description",
+			templateName = "WC Template Name");
+
+		var siteID = Site.getSiteId();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Page Name");
+
+		PageEditor.addContentDisplay(fragmentName = "Content");
+
+		PageEditor.editContentDisplay(
+			customWebcontenttemplate = "WC Template Name",
+			fragmentName = "Content",
+			webcontent = "true",
+			webContentContent = "${siteID}",
+			webContentTitle = "Webcontent Title");
+
+		Button.clickPublish();
+
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Test Site Name");
+
+		AssertTextEquals.assertPartialTextAceEditor(
+			locator1 = "PageEditor#CONTENT_PAGE_WEB_CONTENT_CONTENT",
+			value1 = "${siteID}");
+
+		AssertTextNotEquals.assertNotPartialText(
+			locator1 = "PageEditor#CONTENT_PAGE_WEB_CONTENT_CONTENT",
+			value1 = "This content maps from web content");
+	}
+
+	@description = "This is a use case for LPS-86141. The title of asset entries in selected collection should be shown as a list in the Collection Display."
+	@priority = "5"
+	test ShowTitleOfCollectionItemsInCollectionDisplay {
+		task ("Add three Web Content Articles based on Basic Web Content") {
+			for (var entryTitle : list "First Web Content,Second Web Content,Third Web Content") {
+				JSONWebcontent.addWebContent(
+					content = "Web Content Content",
+					groupName = "Test Site Name",
+					title = "${entryTitle}");
+			}
+		}
+
+		task ("Add three Blogs entries") {
+			for (var entryTitle : list "First Blogs Entry,Second Blogs Entry,Third Blogs Entry") {
+				JSONBlog.addEntry(
+					entryContent = "Blogs Entry Content",
+					entryTitle = "${entryTitle}",
+					groupName = "Test Site Name");
+			}
+		}
+
+		task ("Add a dynamic Collections and select Web Content Article as Asset Entry Type") {
+			JSONAssetlist.addDynamicAssetListEntry(
+				groupName = "Test Site Name",
+				title = "Dynamic Collection");
+
+			AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+			AssetListsAdmin.editAssetList(assetListTitle = "Dynamic Collection");
+
+			AssetListsAdmin.configureAssetEntryType(selectedAsset = "Web Content Article");
+		}
+
+		task ("Add a manual Collections and select three Blogs entries") {
+			JSONAssetlist.addManualAssetListEntry(
+				groupName = "Test Site Name",
+				title = "Manual Collection");
+
+			AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+			AssetListsAdmin.selectAsset(
+				assetListName = "Manual Collection",
+				assetType = "Blogs Entry",
+				entryList = "First Blogs Entry,Second Blogs Entry,Third Blogs Entry");
+		}
+
+		task ("Add a Collection Display to page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-name");
+
+			ContentPages.clickPencil();
+
+			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+		}
+
+		task ("Select the dynamic collection") {
+			PageEditor.editCollectionDisplay(
+				assetListName = "Dynamic Collection",
+				fragmentName = "Collection Display");
+		}
+
+		task ("Assert the title of three Web Content Articles is shown as a list in Collection Display") {
+			AssertVisible(
+				key_colPosition = "1",
+				key_entryTitle = "Third Web Content",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+
+			AssertVisible(
+				key_colPosition = "1",
+				key_entryTitle = "Second Web Content",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "2",
+				locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+
+			AssertVisible(
+				key_colPosition = "1",
+				key_entryTitle = "First Web Content",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "3",
+				locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+		}
+
+		task ("Select the manual collection") {
+			PageEditor.editCollectionDisplay(
+				assetListName = "Manual Collection",
+				fragmentName = "Collection Display");
+		}
+
+		task ("Assert the title of three Web Content Articles is shown as a list in Collection Display") {
+			AssertVisible(
+				key_colPosition = "1",
+				key_entryTitle = "First Blogs Entry",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "1",
+				locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+
+			AssertVisible(
+				key_colPosition = "1",
+				key_entryTitle = "Second Blogs Entry",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "2",
+				locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+
+			AssertVisible(
+				key_colPosition = "1",
+				key_entryTitle = "Third Blogs Entry",
+				key_fragmentName = "Collection Display",
+				key_rowPosition = "3",
+				locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+		}
+	}
+
+	@description = "Given a published content page with an unconfigured Content fragment, when the page is viewed the fragment should not be visible."
+	@priority = "4"
+	test UnconfiguredContentDisplayFragmentIsNotVisible {
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Page Name");
+
+		PageEditor.addContentDisplay(fragmentName = "Content");
+
+		Button.clickPublish();
+
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Test Site Name");
+
+		task ("Assert the fragment is not visible in the site page") {
+			AssertElementNotPresent(
+				key_pageName = "Test Page Name",
+				locator1 = "PageEditor#CONTENT_PAGE_TEXT_CONTENT");
+		}
+	}
+
+}

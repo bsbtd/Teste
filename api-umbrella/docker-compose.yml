@@ -1,0 +1,20 @@
+version: "2.1"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    command: /app/docker/dev/docker-start
+    volumes:
+      - .:/app
+      - build_cache:/build
+    environment:
+      HTTP_PORT: 8100
+      HTTPS_PORT: 8101
+    ports:
+      - "8100:8100"
+      - "8101:8101"
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+volumes:
+  build_cache:

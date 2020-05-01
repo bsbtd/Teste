@@ -1,0 +1,31 @@
+@default = "open"
+@summary = "Open browser to '${locator1}'"
+definition {
+
+	function open {
+		WaitForSPARefresh();
+
+		selenium.selectWindow("null");
+
+		selenium.selectFrame("relative=top");
+
+		selenium.open();
+
+		selenium.assertJavaScriptErrors();
+
+		selenium.assertLiferayErrors();
+
+		WaitForSPARefresh();
+	}
+
+	function openNoError {
+		WaitForSPARefresh();
+
+		selenium.selectWindow("null");
+
+		selenium.selectFrame("relative=top");
+
+		selenium.open();
+	}
+
+}

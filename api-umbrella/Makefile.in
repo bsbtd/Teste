@@ -1,0 +1,28 @@
+# A minimal Makefile that downloads the "task" tool and passes things off to
+# that tool for executing (so "make all" actually becomes "task all"). See
+# Taskfile.yml for more detail.
+
+source_dir:=@source_dir@
+
+build_dir:=@build_dir@
+export BUILD_DIR=$(build_dir)
+work_dir:=$(build_dir)/build/work
+
+prefix:=@prefix@
+export PREFIX=$(prefix)
+
+.PHONY: default task-passthrough
+default: all
+
+# Download and locally install the "task" tool.
+task_version:=2.8.0
+$(source_dir)/tasks/bootstrap-$(task_version): ;
+$(work_dir)/stamp/bootstrap-$(task_version): $(source_dir)/tasks/bootstrap-$(task_version)
+	$(source_dir)/tasks/bootstrap-$(task_version)
+
+task-passthrough: $(work_dir)/stamp/bootstrap-$(task_version)
+	$(work_dir)/task --dir "$(source_dir)" $(MAKECMDGOALS)
+
+# Match all commands sent to "make" and send them to "task" instead.
+%: task-passthrough
+	@true

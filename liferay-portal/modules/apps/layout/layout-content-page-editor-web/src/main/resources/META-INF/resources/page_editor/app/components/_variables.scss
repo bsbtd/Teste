@@ -1,0 +1,31 @@
+// Animations
+
+$defaultTransitionDuration: 0.5s;
+
+// Layout
+
+$pageEditorSpacing: 8px;
+
+$controlMenuHeight: 48px;
+$desktopControlMenuHeight: 56px;
+$managementBarHeight: 112px;
+$sidebarButtonWidth: 40px;
+$sidebarContentWidth: 280px;
+$toolbarBorderWidth: 1px;
+$toolbarHeight: 64px;
+
+$floatingToolbarPanelMinWidth: 288px;
+
+$dropTargetWidth: 5px;
+
+// z-indexes, ordered numerically.
+
+$floatingToolbarZIndex: 976;
+$dragSourceZIndex: 977;
+$translationStatusListZIndex: 977;
+$portletTopperZIndex: 986;
+$floatingToolbarPanelZIndex: 987;
+$floatingToolbarZIndex: 987;
+$sidebarZIndex: 988;
+$dragPreviewLayer: 991;
+$shimZIndex: 9999;

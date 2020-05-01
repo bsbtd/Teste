@@ -1,0 +1,215 @@
+- requesting_agency: General Services Administration
+  office: FedRAMP
+  rfq_id: ID09160019
+  title: Authorizations Marketplace Dashboard
+  solicitation_date: 2016-03-16
+  period_of_performance:
+    base_period: 2
+  repository: 'https://github.com/18F/bpa-fedramp-dashboard'
+  description: |
+    The scope of this task order is for the Contractor to deliver the public beta launch of the Federal Risk and Authorization Management Program (FedRAMP) dashboard.
+  date_posted: 2016-05-14
+  date_updated: 2016-05-14
+  state: delivered
+  award_data:
+    vendor: TrueTandem​
+    amount: "$153,782.05"
+    bidders: 14
+    mean: "$120,626.54"
+    median: "$110,779.97"
+    stdev: "$49,172.90"
+    date: 2016-06-06
+- requesting_agency: General Services Administration
+  office: 18F
+  rfq_id: 1109584
+  title: Identity Management Scrum Team
+  solicitation_date: 2016-07-08
+  period_of_performance:
+    base_period: 3
+    option_period: 3 additional 3-month option periods, and a contingency period of up to 6 months.
+  repository: "https://github.com/18F/bpa-identity-management"
+  description: |
+    Consumer Identity Management is a problem the Government has tried to solve in a number of ways over the past decade. 18F and a team across the government is now tasked with launching a new solution by November 2016. Our efforts are clearly described on our blog and further detailed in Executive Order 13681.
+  award_data:
+    vendor: Agileana
+    amount: "$313,910.40 for base, $1,261,911.60 total"
+    bidders: 1
+    mean: "$1,261,911.60"
+    median: "$1,261,911.60"
+    stdev: "N/A"
+    date: 2016-09-09
+  date_posted: 2016-05-14
+  date_updated: 2016-09-09
+  state: awarded
+- requesting_agency: Department of Labor
+  office: Wage and Hour Division
+  rfq_id: 1110470
+  title: 14(c) Development
+  solicitation_date: 2016-07-11
+  period_of_performance:
+    base_period: 2
+  repository: https://github.com/18F/bpa-DOL-WHD-14-c-
+  description: |
+    Section 14(c) permits the payment of subminimum wage rates, after receipt of a certificate by DOL, to individuals whose earning or productive capacity is impaired by a disability for the work to be performed. It requires that an individual’s rate of pay be commensurate with the rates paid workers without a disability performing the same type of work in the same vicinity.
+
+    The 14(c) system will become a modern, digital-first service. Applicants will be provided an intuitive online experience, guiding them through the information needed to complete their application correctly. Applicants will have the ability to save their progress along the way, submit it to the system and see their application status. The application data will be made available to WHD users to inform certification and enforcement decisions. Applicants will have access to previous applications in order to apply for renewal. The product will support policy and process evolution over time, and will support data transparency wherever and however possible.
+  date_posted: 2016-05-14
+  award_data:
+    vendor: Applied Information Systems​
+    amount: "$163,102.60"
+    bidders: 7
+    mean: "$187,135.44"
+    median: "$185,606.29"
+    stdev: "$91,179.57"
+    date: 2016-09-09
+  date_updated: 2016-09-09
+  state: delivered
+- requesting_agency: Department of Labor
+  office: Wage and Hour Division
+  rfq_id: 1204822
+  title: 14(c) Web Application Tool
+  solicitation_date: 2017-06-21
+  period_of_performance:
+    base_period: 4
+  repository: https://github.com/18F/bpa-DOL-WHD-14-c-
+  description: |
+    Section 14(c) permits the payment of subminimum wage rates, after receipt of a certificate by DOL, to individuals whose earning or productive capacity is impaired by a disability for the work to be performed. It requires that an individual’s rate of pay be commensurate with the rates paid workers without a disability performing the same type of work in the same vicinity.
+
+    The 14(c) system will become a modern, digital-first service. Applicants will be provided an intuitive online experience, guiding them through the information needed to complete their application correctly. Applicants will have the ability to save their progress along the way, submit it to the system and see their application status. The application data will be made available to WHD users to inform certification and enforcement decisions. Applicants will have access to previous applications in order to apply for renewal. The product will support policy and process evolution over time, and will support data transparency wherever and however possible.
+  date_posted: 2017-06-21
+  date_updated: 2017-09-21
+  award_data:
+    vendor: Applied Information Systems
+    amount: "$297,757.44"
+    bidders: 5
+    mean: "$301,786.96"
+    median: "$327,481.20"
+    stdev: "$73,719.10"
+    date: 2016-08-29
+  state: delivered
+- requesting_agency: Office of Personnel Management
+  office: Federal Investigative Services (FIS)
+  rfq_id: 1138886
+  title: e-QIP Refresh Prototyping
+  solicitation_date: 2016-09-06
+  period_of_performance:
+    base_period: 3
+    option_period: 5 additional 3-month option periods, and a contingency period of up to 6 months.
+  repository: "https://github.com/18F/bpa-opm-eqip"
+  description:  |
+    A prototype design and development project to refresh the Electronic Questionnaires for Investigations Processing (e-QIP) system.
+  date_posted: 2016-07-10
+  date_updated: 2016-11-04
+  state: delivered
+  award_data:
+    vendor: TrueTandem
+    amount: "$1,478,179.20"
+    bidders: 9
+    mean: "$1,881,777.00"
+    median: "$1,939,185.94" 
+    stdev: "$461,492.36"
+    date: 2016-11-03
+- requesting_agency: U.S. Department of Housing and Urban Development
+  office: Office of Policy Development and Research
+  rfq_id: 1168769
+  title: Disaster Data Recovery Portal (pilot project)
+  solicitation_date: 2017-02-07
+  period_of_performance:
+    base_period: 4
+  repository: https://github.com/18F/bpa-disaster-data-portal-pilot
+  description: |
+    The scope of this task is to build a working pilot of a portal that collects and displays Community Development Block Grant – Disaster Recovery (CDBG-DR) data.
+  date_posted: 2016-09-28
+  date_updated: 2017-02-07
+  state: awarded
+  award_data:
+    vendor: Flexion, Inc.
+    amount: "$237,776.22"
+    bidders: 6
+    mean: "$273,170.00"
+    median: "$285,098.00" 
+    stdev: "$46,655.90"
+    date: 2017-04-13
+- requesting_agency: U.S. Department of State
+  office: Bureau of Human Resources Executive Office
+  rfq_id: 1169875
+  title: Foreign Service Talent Management System (TalentMAP)
+  solicitation_date: 2017-02-10
+  period_of_performance:
+    base_period: 12
+  repository: https://github.com/18F/bpa-DOS-TalentMAP
+  description:   |
+    TalentMAP is anticipated to replace the Foreign Service Bidding (FSBid) application and serve as a unified source of information (currently stored outside of FSBID) regarding available Foreign Service positions and post data for Foreign Service employees.
+  date_posted: 2017-02-10
+  date_updated: 2016-02-11
+  state: delivered
+  award_data:
+    vendor: Booz Allen Hamilton
+    amount: "$1,178,104.51"
+    bidders: "5"
+    mean: "$1,065,545.248"
+    median: "$1,138,011.20"
+    stdev: "$443,953.19"
+    date: 2017-05-10
+- requesting_agency: Department of Agriculture
+  office: Forest Service
+  rfq_id: 1160564
+  title: Forest Service e-Permitting API
+  solicitation_date: 2016-12-21
+  period_of_performance:
+    base_period: 4
+  repository: https://github.com/18F/bpa-fs-epermit-api
+  description: An application protocol interface (API) for the U.S. Forest Service ePermits special use permits.
+  date_posted: 2016-10-27
+  date_updated: 2017-02-06
+  state: delivered
+  award_data:
+    vendor: NCI Information Systems
+    amount: "$213,688.13"
+    bidders: "7"
+    mean: "$254,664.35"
+    median: "$247,725.36"
+    stdev: "$74,202.88"
+    date: 2017-02-02
+- requesting_agency: Department of Agriculture
+  office: Forest Service
+  rfq_id: 1171039
+  title: Forest Service e-Permitting Intake Module
+  solicitation_date: 2017-02-15
+  period_of_performance:
+    base_period: 3
+    option_period: One additional 3 month option
+  repository: https://github.com/18F/bpa-fs-epermit-intake
+  description: The U.S. Forest Service is engaged in an ongoing effort to modernize and simplify their permitting processes. One facet of this effort is “ePermitting”, or making the applications for many Forest Service permits available online. This application is for a public front-end intake module for use by non-commercial groups, temporary outfitter, and guide permits.
+  date_posted: 2017-01-24
+  date_updated: 2018-01-31
+  state: delivered
+  award_data:
+    vendor: Flexion Inc.
+    amount: "$157,628.78"
+    bidders: "2"
+    mean: "$178,509.67"
+    median: "$178,509.67"
+    stdev: "$41,761.78"
+    date: 2017-04-05
+- requesting_agency: Department of Agriculture
+  office: Forest Service
+  rfq_id: 11170033
+  title: Forest Service e-Permitting Christmas Trees Module
+  solicitation_date: 2017-07-29
+  period_of_performance:
+    base_period: 6
+    option_period: One 3 month option
+  repository: https://github.com/18F/bpa-fs-xmas-trees
+  description: The objective of this task order is to develop an online permitting module focused on Christmas tree sales. Every winter, many national forests sell “tags” for Christmas tree cutting (“tag” is the term for a Christmas-tree-specific permit). After purchasing a tag, members of the public can travel to parts of nearby national forests to cut down a tree from a designated area.
+  date_posted: 2017-02-15
+  date_updated: 2017-09-21
+  state: delivered
+  award_data:
+    vendor: NCI Information Systems
+    amount: "$638,266.00"
+    bidders: "2"
+    mean: "$481,527.12"
+    median: "$481,527.12"
+    stdev: "$221,662.41"
+    date: 2017-09-21

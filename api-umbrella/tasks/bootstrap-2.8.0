@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+task_version="2.8.0"
+task_hash="4ea203e79f9ba0490ff8e073a028cb1820412bc083322db4349d7d5e050760a2"
+
+set -e -u -x
+root_dir="$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)"
+# shellcheck source=tasks/helpers.sh
+source "$root_dir/tasks/helpers.sh"
+
+task_working_dir
+download "https://github.com/go-task/task/releases/download/v$task_version/task_linux_amd64.tar.gz" "sha256" "$task_hash"
+extract_download "task_linux_amd64.tar.gz"
+cp ./task "$WORK_DIR/task"
+
+stamp

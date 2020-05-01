@@ -1,0 +1,192 @@
+definition {
+
+	macro add {
+		LexiconEntry.gotoAdd();
+
+		PortletEntry.inputName(name = "${dmDocumentTypeName}");
+
+		PortletEntry.inputDescription(description = "${dmDocumentTypeDescription}");
+
+		Panel.expandPanel(panel = "Main Metadata Fields");
+
+		for (var dmDocumentTypeFieldName : list "${dmDocumentTypeFieldNames}") {
+			DynamicDataMapping.addField(
+				field = "${dmDocumentTypeFieldName}",
+				fieldFieldLabel = "${dmDocumentTypeFieldName}",
+				fieldName = StringUtil.replace("${dmDocumentTypeFieldName}", " ", ""));
+		}
+
+		if (isSet(metadataSetName)) {
+			Panel.expandPanel(panel = "Additional Metadata Fields");
+
+			DMDocumentType.selectPGMetadataSet(key_metadataSetName = "${metadataSetName}");
+		}
+
+		DDLDataDefinition.save();
+	}
+
+	macro deletePG {
+		DMDocumentType.selectDocumentTypeFrame();
+
+		var key_dmDocumentTypeName = "${dmDocumentTypeName}";
+
+		LexiconEntry.openEntryMenu(rowEntry = "${dmDocumentTypeName}");
+
+		MenuItem.clickNoError(menuItem = "Delete");
+
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+
+		Alert.viewSuccessMessage();
+
+		AssertTextNotPresent(
+			locator1 = "DocumentsAndMediaDocumentTypes#DOCUMENT_TYPES_TABLE_NAME",
+			value1 = "${dmDocumentTypeName}");
+	}
+
+	macro edit {
+		DMDocumentType.selectDocumentTypeFrame();
+
+		var key_dmDocumentTypeName = "${dmDocumentTypeName}";
+
+		LexiconEntry.openEntryMenu(rowEntry = "${dmDocumentTypeName}");
+
+		MenuItem.click(menuItem = "Edit");
+
+		if (isSet(dmDocumentTypeNameEdit)) {
+			Type.clickAtType(
+				locator1 = "TextInput#NAME",
+				value1 = "${dmDocumentTypeNameEdit}");
+		}
+
+		if (isSet(dmDocumentTypeDescriptionEdit)) {
+			Type(
+				locator1 = "DocumentsAndMediaEditDocumentType#DETAILS_DESCRIPTION_FIELD",
+				value1 = "${dmDocumentTypeDescriptionEdit}");
+		}
+
+		if (isSet(dmDocumentTypeFieldRequiredEdit)) {
+			Panel.expandPanel(panel = "Main Metadata Fields");
+
+			DynamicDataMapping.editFieldSettings(fieldFieldLabel = "${dmDocumentTypeFieldRequiredEdit}");
+
+			DynamicDataMapping.makeFieldRequired();
+		}
+
+		if (isSet(dmDocumentTypeFieldNames)) {
+			Panel.expandPanel(panel = "Main Metadata Fields");
+
+			for (var dmDocumentTypeFieldName : list "${dmDocumentTypeFieldNames}") {
+				DynamicDataMapping.addField(
+					field = "${dmDocumentTypeFieldName}",
+					fieldFieldLabel = "${dmDocumentTypeFieldName}",
+					fieldName = StringUtil.replace("${dmDocumentTypeFieldName}", " ", ""));
+			}
+		}
+
+		DMDocumentType.selectDocumentTypeFrame();
+
+		if ("${removeMetadataSet}" == "true") {
+			var key_metadataSetName = "${metadataSetName}";
+
+			Panel.expandPanel(panel = "Additional Metadata Fields");
+
+			Click(locator1 = "DocumentsAndMediaEditDocumentType#REMOVE_METADATA_SET_BUTTON");
+		}
+
+		DDLDataDefinition.save();
+
+		if (isSet(dmDocumentTypeNameEdit)) {
+			AssertTextEquals(
+				locator1 = "DocumentsAndMediaDocumentTypes#DOCUMENT_TYPES_TABLE_NAME",
+				value1 = "${dmDocumentTypeNameEdit}");
+		}
+		else {
+			var key_dmDocumentTypeName = "${dmDocumentTypeName}";
+
+			AssertTextEquals(
+				locator1 = "DocumentsAndMediaDocumentTypes#DOCUMENT_TYPES_TABLE_NAME",
+				value1 = "${dmDocumentTypeName}");
+		}
+	}
+
+	macro selectDocumentTypeFrame {
+		if (IsElementPresent(locator1 = "IFrame#DOCUMENT_TYPES")) {
+			SelectFrame(locator1 = "IFrame#DOCUMENT_TYPES");
+		}
+	}
+
+	macro selectPGMetadataSet {
+		AssertClick(
+			locator1 = "DocumentsAndMediaEditDocumentType#SELECT_BUTTON",
+			value1 = "Select");
+
+		SelectFrameTop(value1 = "relative=top");
+
+		DMMetadataSet.selectMetadataSetsFrame();
+
+		Click(
+			key_metadataSetName = "${metadataSetName}",
+			locator1 = "DocumentsAndMediaMetadataSets#METADATA_SETS_NAME");
+
+		SelectFrameTop(value1 = "relative=top");
+	}
+
+	macro tearDownCP {
+		Navigator.openURL();
+
+		ProductMenu.gotoPortlet(
+			category = "Content &amp; Data",
+			panel = "Site Administration",
+			portlet = "Documents and Media");
+
+		DMNavigator.gotoDocumentType();
+
+		DMDocumentType.selectDocumentTypeFrame();
+
+		Search.searchCP(searchTerm = "DM Document Type");
+
+		while (IsElementPresent(locator1 = "DocumentsAndMediaDocumentTypes#DOCUMENT_TYPES_TABLE_ACTIONS_1")) {
+			Click(locator1 = "DocumentsAndMediaDocumentTypes#DOCUMENT_TYPES_TABLE_ACTIONS_1");
+
+			MenuItem.clickNoError(menuItem = "Delete");
+
+			AssertConfirm.waitForConfirmation(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+
+			Alert.viewSuccessMessage();
+		}
+	}
+
+	macro viewCP {
+		var key_dmDocumentTypeName = "${dmDocumentTypeName}";
+
+		if (isSet(dmDocumentTypeScope)) {
+			var key_dmDocumentTypeScope = "${dmDocumentTypeScope}";
+
+			AssertTextEquals(
+				locator1 = "DocumentsAndMediaDocumentTypes#DOCUMENT_TYPES_TABLE_SCOPE",
+				value1 = "${dmDocumentTypeName}");
+		}
+
+		AssertTextEquals(
+			locator1 = "DocumentsAndMediaDocumentTypes#DOCUMENT_TYPES_TABLE_NAME",
+			value1 = "${dmDocumentTypeName}");
+	}
+
+	macro viewMenulistOption {
+		var key_dmDocumentTypeName = "${dmDocumentTypeName}";
+
+		LexiconEntry.gotoAdd();
+
+		AssertTextEquals(
+			key_menuItem = "${dmDocumentTypeName}",
+			locator1 = "MenuItem#ANY_MENU_ITEM",
+			value1 = "${dmDocumentTypeName}");
+	}
+
+	macro viewNoAvailableActionsViaDocumentTypesPG {
+		DMNavigator.gotoDocumentType();
+
+		AssertElementNotPresent(locator1 = "DocumentsAndMediaDocumentTypes#DOCUMENT_TYPES_TABLE_ACTIONS_1");
+	}
+
+}

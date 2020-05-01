@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+}
+
+description = 'OpenTelemetry Examples for SDK Usage'
+ext.moduleName = "io.opentelemetry.examples.sdk.usage"
+
+dependencies {
+    compile "io.opentelemetry:opentelemetry-sdk:${opentelemetryVersion}"
+    compile "io.opentelemetry:opentelemetry-exporters-logging:${opentelemetryVersion}"
+}

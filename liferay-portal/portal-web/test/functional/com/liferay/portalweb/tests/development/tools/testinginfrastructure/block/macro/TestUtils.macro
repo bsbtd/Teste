@@ -1,0 +1,45 @@
+definition {
+
+	macro assertEquals {
+		echo("${expected}");
+
+		echo("${actual}");
+
+		if ("${expected}" == "${actual}") {
+			echo("PASSED");
+		}
+		else {
+			TestUtils.fail(message = "FAILED: expected &apos;${expected}&apos;, actual was &apos;${actual}&apos;");
+		}
+	}
+
+	macro fail {
+		if (!(isSet(message))) {
+			var message = "FAIL";
+		}
+
+		echo("${message}");
+
+		fail("${message}");
+	}
+
+	macro pass {
+		if (!(isSet(message))) {
+			var message = "PASS";
+		}
+
+		echo("${message}");
+	}
+
+	macro typeIntoField {
+		Navigator.openURL();
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		SitePages.addPublicPage(pageName = "Test Page Name");
+	}
+
+}

@@ -1,0 +1,9 @@
+Bundle-Name: Liferay Portal Security LDAP Implementation
+Bundle-SymbolicName: com.liferay.portal.security.ldap.impl
+Bundle-Version: 3.0.6
+Import-Package:\
+	!junit.*,\
+	\
+	!org.junit.*,\
+	\
+	*

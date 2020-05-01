@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+#
+# Download previous API Umbrella packages so the verify scripts can test
+# package upgrades.
+#
+
+set -e -u
+
+source_dir="$(dirname "$(dirname "$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")")")"
+
+function compare_version {
+  echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }';
+}
+
+previous_versions=(
+  0.11.1-1
+  0.12.0-1
+  0.13.0-1
+  0.14.0-1
+  0.14.1-1
+  0.14.2-1
+  0.14.3-1
+  0.14.4-1
+)
+
+distros=(
+  centos-6
+  centos-7
+  ubuntu-16.04
+  ubuntu-18.04
+  debian-8
+  debian-9
+)
+
+if [ -n "${DIST:-}" ]; then
+  distros=("$DIST")
+fi
+
+bintray_url_root="https://bintray.com/artifact/download/nrel"
+checksums="$(cat "$source_dir/sha256sums.txt")"
+
+for dist in "${distros[@]}"; do
+  for version in "${previous_versions[@]}"; do
+    filename=""
+    url_prefix=""
+    url_filename=""
+
+    case "$dist" in
+      centos-6)
+        filename="api-umbrella-${version}.el6.x86_64.rpm"
+        url_prefix="$bintray_url_root/api-umbrella-el6"
+        ;;
+      centos-7)
+        filename="api-umbrella-${version}.el7.x86_64.rpm"
+        url_prefix="$bintray_url_root/api-umbrella-el7"
+        ;;
+      ubuntu-16.04)
+        filename="api-umbrella_${version}~xenial_amd64.deb"
+        url_prefix="$bintray_url_root/api-umbrella-ubuntu/pool/main/a/api-umbrella"
+        if [ "$(compare_version "$version")" -lt "$(compare_version "0.12.0")" ]; then
+          # No Ubuntu 16.04 packages until v0.12
+          filename=""
+        fi
+        ;;
+      ubuntu-18.04)
+        filename="api-umbrella_${version}~bionic_amd64.deb"
+        url_prefix="$bintray_url_root/api-umbrella-ubuntu/pool/main/a/api-umbrella"
+        if [ "$(compare_version "$version")" -lt "$(compare_version "0.15.0")" ]; then
+          # No Ubuntu 18.04 packages until v0.15
+          filename=""
+        fi
+        ;;
+      debian-8)
+        filename="api-umbrella_${version}~jessie_amd64.deb"
+        url_prefix="$bintray_url_root/api-umbrella-debian/pool/main/a/api-umbrella"
+        ;;
+      debian-9)
+        filename="api-umbrella_${version}~stretch_amd64.deb"
+        url_prefix="$bintray_url_root/api-umbrella-debian/pool/main/a/api-umbrella"
+        if [ "$(compare_version "$version")" -lt "$(compare_version "0.15.0")" ]; then
+          # No Debian 9 packages until v0.15
+          filename=""
+        fi
+        ;;
+      *)
+        echo "Unknown distribution: $dist"
+        exit 1
+        ;;
+    esac
+
+    if [ -n "$filename" ]; then
+      if [ -z "$url_filename" ]; then
+        url_filename="$filename"
+      fi
+
+      download_dir="$source_dir/build/package/work/archives/$version/$dist/core"
+      download_path="$download_dir/$filename"
+      echo "$download_path"
+      if [ ! -f "$download_path" ]; then
+        url="$url_prefix/$url_filename"
+        mkdir -p "$download_dir"
+        echo "$url"
+        curl -f -L -o "$download_path" -C - "$url"
+      fi
+
+      cd "$download_dir"
+      file_checksum=$(openssl dgst -sha256 "$filename")
+      if [[ -z "$file_checksum" ]] || [[ $checksums != *$file_checksum* ]]; then
+        echo "Checksum mismatch for $download_path"
+        echo "$file_checksum"
+        echo "Verify that the file downloaded successfully."
+        exit 1
+      fi
+    fi
+  done
+done

@@ -1,0 +1,50 @@
+.field-type {
+	border: 2px solid transparent;
+	border-radius: 4px;
+	box-sizing: border-box;
+	padding: 0.75rem 0;
+	transition: transform 0.3s $animation;
+
+	&:not(.disabled) {
+		cursor: grab;
+	}
+
+	&:hover:not(.disabled) {
+		border-color: #80acff;
+		box-shadow: 0 2px 4px rgba(39, 40, 51, 0.12);
+		transform: translateX(-2px);
+	}
+
+	&.disabled .autofit-col {
+		opacity: 0.3;
+	}
+
+	&.dragging {
+		background-color: #e7e7ed;
+		opacity: 0.5;
+	}
+
+	.sticker {
+		background-color: #f7f8f9;
+		color: #6b6c7e;
+	}
+
+	.list-group-subtitle {
+		line-height: 0.875rem;
+
+		small {
+			font-size: 0.75rem;
+		}
+	}
+}
+
+.field-type-drag-preview {
+	max-width: 280px;
+
+	.field-type {
+		background-color: #fff;
+		border-color: #80acff;
+		box-shadow: 0 8px 16px rgba(39, 40, 51, 0.16);
+		cursor: grabbing;
+	}
+}

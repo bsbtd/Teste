@@ -1,0 +1,61 @@
+plugins {
+    id "java"
+}
+
+description = "OpenTelemetry All"
+ext.moduleName = "io.opentelemetry.all"
+
+def subprojects = [
+        project(':opentelemetry-api'),
+        project(':opentelemetry-context-prop'),
+        project(':opentelemetry-contrib-runtime-metrics'),
+        project(':opentelemetry-contrib-trace-propagators'),
+        project(':opentelemetry-contrib-trace-utils'),
+        project(':opentelemetry-contrib-auto-annotations'),
+        project(':opentelemetry-exporters-logging'),
+        project(':opentelemetry-exporters-inmemory'),
+        project(':opentelemetry-exporters-jaeger'),
+        project(':opentelemetry-exporters-otlp'),
+        project(':opentelemetry-exporters-prometheus'),
+        project(':opentelemetry-opentracing-shim'),
+        project(':opentelemetry-sdk'),
+        project(':opentelemetry-sdk-contrib-async-processor'),
+        project(':opentelemetry-sdk-contrib-auto-config'),
+        project(':opentelemetry-sdk-contrib-otproto'),
+        project(':opentelemetry-sdk-contrib-testbed'),
+        project(':opentelemetry-sdk-contrib-jaeger-remote-sampler'),
+]
+
+for (subproject in rootProject.subprojects) {
+    if (subproject == project) {
+        continue
+    }
+    evaluationDependsOn(subproject.path)
+}
+
+dependencies {
+    compile subprojects
+}
+
+task jacocoMerge(type: JacocoMerge) {
+    dependsOn(subprojects.jacocoTestReport.dependsOn)
+    mustRunAfter(subprojects.jacocoTestReport.mustRunAfter)
+    destinationFile = file("${buildDir}/jacoco/test.exec")
+    executionData = files(subprojects.jacocoTestReport.executionData)
+            .filter { f -> f.exists() }
+}
+
+jacocoTestReport {
+    dependsOn(jacocoMerge)
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    additionalSourceDirs.from = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.from = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.from = files(subprojects.sourceSets.main.output)
+    classDirectories.from = files(classDirectories.files.collect {
+        fileTree(dir: it)
+    })
+}

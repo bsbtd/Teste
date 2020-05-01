@@ -1,0 +1,36 @@
+@component-name = "portal-test-plugins"
+definition {
+
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.main.component.name = "Test Plugins";
+	property portlet.plugins.includes = "test-cache-configuration-portlet";
+
+	setUp {
+		User.firstLoginPG();
+	}
+
+	tearDown {
+		Page.tearDownCP();
+	}
+
+	@ignore = "true"
+	@priority = "4"
+	test ViewCacheConfiguration {
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		SitePages.addPublicPage(pageName = "Test Cache Configuration Page");
+
+		Navigator.gotoPage(pageName = "Test Cache Configuration Page");
+
+		Portlet.addPG(portletName = "Test Cache Configuration");
+
+		AssertVisible(locator1 = "TestBlob#TEST_PORTLET_BODY_PASSED");
+
+		AssertTextNotPresent(value1 = "FAILED");
+	}
+
+}

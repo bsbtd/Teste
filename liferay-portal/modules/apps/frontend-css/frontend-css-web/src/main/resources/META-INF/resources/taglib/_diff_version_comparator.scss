@@ -1,0 +1,28 @@
+.diff-version-comparator {
+	.taglib-diff-html {
+		.diff-html-changed {
+			border-bottom: 2px dotted transparent;
+		}
+
+		.diff-added-image,
+		.diff-removed-image {
+			display: none;
+		}
+
+		img {
+			max-width: 100%;
+		}
+	}
+
+	.diff-target-selector {
+		border-left: 1px solid transparent;
+	}
+
+	.divider {
+		margin-bottom: 20px;
+	}
+
+	.list-group-item {
+		cursor: pointer;
+	}
+}

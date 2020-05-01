@@ -1,0 +1,279 @@
+# --- Api Auth ----------------------------------------------------------------
+
+# A secret key that is used for validating api requests sent via the UI.
+# Set this to something random.
+
+api.secret =
+
+# Whether or not API authentication should be enabled
+api.auth.enable = true
+
+# Ignore these IP Addresses when checking for an API key
+api.auth.ip.whitelist = 127.0.0.1
+
+# --- Admin Auth --------------------------------------------------------------
+
+# The default admin user name.
+# This admin user will be created automatically during deployment.
+
+default.admin.user =
+
+# The default admin password. The password will get updated during each deployment.
+
+default.admin.password =
+
+# A regex that all admin user names must adhere to.  (default ^[A-z0-9._%+-]+@nysenate.gov$)
+
+admin.email.regex = ^[A-z0-9._%+-]+@nysenate.gov$
+
+# --- Google Analytics --- */
+
+ga.tracking.id =
+
+# --- Data Directory Configuration --------------------------------------------
+
+# The directory path that serves as the root of the data environment.
+# Omit any trailing slashes. (Default: /data/openleg)
+
+env.base = /data/openleg
+
+# The directory path where new files can be staged for processing.
+# Omit any trailing slashes. (Default: /data/openleg/staging)
+
+env.staging = /data/openleg/staging
+
+# The directory path where files are archived once they are processed.
+# Omit any trailing slashes. (Default: /data/openleg/archive)
+
+env.archive = /data/openleg/archive
+
+# The database schema where the legislative content is persisted.
+# (Default: master)
+
+env.schema = master
+
+# --- Processing Configuration ------------------------------------------------
+
+leg.data.process.enabled = false
+
+# Allow for processing of data
+# (Default: true)
+
+data.process.enabled = true
+
+# Allow persistent logging of all data processing runs
+# (Default: true)
+
+data.process.log.enabled = true
+
+# Enable batch processing of SOBIs to improve performance. The updates to the
+# SOBIs are stored into memory and flushed at a later time to reduce the number
+# of writes.
+# NOTE: Enabling this will make the change log inaccurate. (Default: false)
+
+leg.data.batch.process.enabled = false
+
+# The maximum number of legislative data files that can be processed without flushing to the
+# database. However, the data processors may flush before this limit if they need
+# to in order to maintain consistency.
+# NOTE: Don't set this too high if the machine doesn't have a lot of JVM memory! (Default: 100)
+
+leg.data.batch.process.size = 100
+
+# --- Elastic Search Configuration --------------------------------------------
+
+# Set to true to allow the application to index processed data into elastic search.
+# (Default: true)
+
+elastic.search.enabled = true
+
+# The host address where the elastic search node is running
+# (Default: localhost)
+
+elastic.search.host = localhost
+
+# The port that the elasticsearch REST API is listening on.
+# (Default: 9200)
+
+elastic.search.port = 9200
+
+# If the elastic search cluster has a name, it must be specified here.
+# (Default: elasticsearch)
+
+elastic.search.cluster.name = openleg
+
+# Allow a number of retries when the elasticsearch connection is established on startup.
+# Each retry will be attempted after a 1 second delay.
+
+elastic.search.connection_retries = 30
+
+# --- Eh Cache Configuration --------------------------------------------------
+
+# -- Element based cache config --
+
+# Bill Cache Element Size (Recommended: 21000. Uses about 300MB heap space)
+bill.cache.element.size = 21000
+
+# Bill Info Cache Element Size (Recommended: 40000. Uses about 100MB heap space)
+bill-info.cache.element.size = 40000
+
+# Law Cache Element Size (Recommended: 150. Uses about 30MB heap space)
+law.cache.element.size = 150
+
+# Agenda Cache Element Size (Recommended: 100. Uses about 25MB heap space)
+agenda.cache.element.size = 100
+
+# -- Heap based cache config --
+
+# Calendar Cache Size (in MB) (Recommended: 10)
+calendar.cache.heap.size = 10
+
+# Committee Cache Size (in MB) (Recommended: 2)
+committee.cache.heap.size = 2
+
+# Notification Cache Size (in MB) (Recommended: 2)
+notification.cache.heap.size = 2
+
+# API User Cache Size (in MB) (Recommended: 2)
+api_user.cache.heap.size = 2
+
+# Full Member Cache Size (in MB) (Recommended: 5)
+full_member.cache.heap.size = 5
+
+# Shortname Cache Size (in MB) (Recommended: 5)
+shortname.cache.heap.size = 5
+
+# Member Cache Size (in MB) (Recommended: 5)
+member.cache.heap.size = 5
+
+# --- Postgres Database Configuration -----------------------------------------
+
+# Database identifier for JDBC.
+# (Default: postgresql:)
+postgresdb.type = postgresql:
+
+# The class that contains the jdbc driver.
+# (Default: org.postgresql.Driver)
+postgresdb.driver = org.postgresql.Driver
+
+# The host address for the database.
+# (Default: localhost)
+postgresdb.host = localhost
+
+# The name of the database used for this app.
+# (Default: openleg)
+postgresdb.name = openleg
+
+# The username for the user that has access to the database named above.
+postgresdb.user =
+
+# And the password..
+postgresdb.pass =
+
+# c3p0 connection pool size configuration
+c3p0.pool.size.initial = 15
+c3p0.pool.size.min = 8
+c3p0.pool.size.max = 15
+
+# --- Scheduling Configuration ------------------------------------------------
+
+# Enable scheduled processing of data.
+# (Default: true)
+scheduler.process.enabled = true
+
+# Enable scheduled spot-check reporting.
+# (Default: true)
+scheduler.spotcheck.enabled = true
+
+# Cron expressions that dictate scheduling for scheduled services
+# Format "{second} {minute} {hour} {day of month} {month} {day of week}"
+
+# When to process data. (Default: 0 */5 * * * *)
+scheduler.process.cron = 0 */5 * * * *
+
+# When to run interval spotcheck reports. (Default: 0 45 23 * * *)
+scheduler.spotcheck.interval.cron = 0 45 23 * * *
+
+# Budget Bill Text Alert Redminder
+scheduler.budget.bill.reminder = 0 0 10,13,16 * * *
+
+# --- Spotcheck Configuration -------------------------------------------------
+
+# The amount of time (in minutes) allowed after an alert arrival for data to come in
+# Spotcheck reports in which content was not found corresponding to a reference that
+#   is younger than this grace period will be aborted
+spotcheck.alert.grace.period = 30
+
+# Allows bills to be automatically added to the bill scrape queue in response to
+# text updates and spotcheck mismatches (Default: true)
+bill.scrape.queue.enabled = true
+
+# Enables periodic checking for email spotcheck references
+# e.g. Daybreaks, agenda/calendar alerts
+spotcheck.checkmail.enabled = true
+
+# --- Openleg Ref to Openleg Source--------------------------------------------
+#Api Key for the reference instance of Openleg
+spotcheck.openleg_ref.api.key =
+
+#Openleg-ref url (include trailing slash)
+spotcheck.openleg_ref.url = http://legislation.nysenate.gov/
+
+# Configure processing queue limits for NYSenate.gov bill spotchecks
+# Lower these sizes if your system is running out of memory during this report
+spotcheck.website.bill.ref_queue_size = 500
+spotcheck.website.bill.data_queue_size = 500
+
+# --- Mail Configuration ------------------------------------------------------
+
+# Connection information for the mail account that receives daybreak emails
+checkmail.host = imap.gmail.com
+checkmail.user = nysenatedev
+checkmail.pass =
+mail.store.protocol = imaps
+mail.imaps.ssl.protocols = TLSv1.2
+
+# Mail directory paths where daybreak emails are stored
+checkmail.receiving = OpenLegislationTest/LRSAutomated
+checkmail.processed = OpenLegislationTest/LRSProcessed
+
+# Connection information for sending emails
+mail.smtp.host =
+mail.smtp.port =
+mail.smtp.auth = true
+mail.smtp.starttls.enable = false
+mail.smtp.ssl.enable = true
+mail.smtp.ssl.protocols = TLSv1.2
+mail.smtp.user =
+mail.smtp.from = openleg-test-no-reply@nysenate.gov
+mail.smtp.password =
+mail.debug = false
+mail.smtp.connectiontimeout = 5000
+mail.smtp.timeout = 5000
+mail.smtp.writetimeout = 5000
+
+# --- Notification Configuration ----------------------------------------------
+
+# Set to true to enable notification sending. (Default false)
+notifications.enabled = false
+
+# --- Slack Configuration -----------------------------------------------------
+
+# The webhook url used to send slack messages.
+# Visit webhook configuration page to get the appropriate Webhook URL
+#   Prod: https://nysstech.slack.com/services/B03BH6D0W
+#   Dev:  https://nysstech.slack.com/services/B0KE63LN6
+slack.webhook.url =
+
+# Limit the number of lines output for slack notifications (default 5)
+slack.notification.line.limit = 5
+
+# --- Domain Configuration ----------------------------------------------------
+
+# The domain url and context path that openleg is hosted on (used for generating links)
+# do not use a trailing slash
+domain.url = http://localhost:8080/legislation
+
+# The base url of the NYSenate public website
+# Useful when testing openleg alongside a development instance of NYSenate.gov
+nysenate.gov.url = https://www.NYSenate.gov

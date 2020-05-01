@@ -1,0 +1,268 @@
+@component-name = "portal-document-management"
+definition {
+
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.main.component.name = "Depot";
+
+	setUp {
+		TestCase.setUpPortalInstance();
+
+		User.firstLoginPG();
+
+		JSONDepot.addDepot(
+			depotDescription = "This is the description of a depot",
+			depotName = "Test Depot Name");
+	}
+
+	tearDown {
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+		else {
+			User.logoutPG();
+		}
+	}
+
+	@description = "This ensures that an organization can be added and removed in the membership of an asset library."
+	@priority = "5"
+	test AddAndRemoveOrganization {
+		JSONOrganization.addOrganization(
+			organizationName = "Organization Name",
+			organizationSite = "true");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Site.assignOrganizationAsMemberCP(orgName = "Organization Name");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Site.viewMemberOrganizationCP(orgName = "Organization Name");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Navigator.gotoNavItem(navItem = "Organizations");
+
+		Site.removeOrganizationCP(orgName = "Organization Name");
+
+		AssertTextEquals(
+			locator1 = "Message#EMPTY_INFO",
+			value1 = "No organization was found that is a member of this asset library.");
+	}
+
+	@description = "This ensures that a user can be added and removed in the membership of an asset library."
+	@priority = "5"
+	test AddAndRemoveUser {
+		property portal.acceptance = "true";
+
+		JSONUser.addUser(
+			userEmailAddress = "userea@liferay.com",
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Site.assignUserAsMemberCP(
+			depotName = "Test Depot Name",
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Site.removeMemberCP(
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		LexiconEntry.changeDisplayStyle(displayStyle = "table");
+
+		LexiconEntry.viewNoEntry(rowEntry = "userfn");
+	}
+
+	@description = "This ensures that a user group can be added and removed in the membership of an asset library."
+	@priority = "5"
+	test AddAndRemoveUserGroup {
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "User Groups");
+
+		UserGroup.addCP(userGroupName = "User Group Name");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Site.assignUserGroupAsMemberCP(userGroupName = "User Group Name");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Site.viewMemberUserGroupCP(userGroupName = "User Group Name");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Navigator.gotoNavItem(navItem = "User Groups");
+
+		Site.removeUserGroupCP(
+			bulkEditing = "true",
+			userGroupNameList = "User Group Name");
+
+		AssertTextEquals(
+			locator1 = "Message#EMPTY_INFO",
+			value1 = "No user group was found that is a member of this asset library.");
+	}
+
+	@description = "This ensures that an asset library can be assigned to a user from the user profile."
+	@priority = "5"
+	test AssignALFromUserProfile {
+		JSONUser.addUser(
+			userEmailAddress = "userea@liferay.com",
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.editUserAssetLibraryCP(
+			depotName = "Test Depot Name",
+			userScreenName = "usersn");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		LexiconEntry.changeDisplayStyle(displayStyle = "table");
+
+		LexiconEntry.viewEntryName(rowEntry = "userfn userln");
+	}
+
+	@description = "This ensures that an asset library with translation can be assigned to a user from the user profile."
+	@priority = "3"
+	test AssignALWithTranslationForUser {
+		JSONUser.addUser(
+			userEmailAddress = "userea@liferay.com",
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "Configuration",
+			depotName = "Test Depot Name",
+			portlet = "Settings");
+
+		Depot.editDepot(
+			depotNameEdit = "título",
+			language = "es-ES",
+			settings = "true");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.editUserAssetLibraryCP(
+			depotName = "Test Depot Name",
+			userScreenName = "usersn");
+
+		Navigator.ensureLocaleURL(locale = "es");
+
+		AssertTextEquals.assertPartialText(
+			key_siteName = "título",
+			locator1 = "UsersAndOrganizationsEditUser#SITES_TABLE_NAME",
+			value1 = "título");
+	}
+
+	@description = "This ensures that an assigned asset library can be removed from the user profile."
+	@priority = "5"
+	test RemoveALFromUserProfile {
+		JSONUser.addUser(
+			userEmailAddress = "userea@liferay.com",
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		Site.assignUserAsMemberCP(
+			depotName = "Test Depot Name",
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.removeUserAssetLibraryCP(
+			depotName = "Test Depot Name",
+			userScreenName = "usersn");
+
+		DepotNavigator.openDepotAdmin();
+
+		DepotNavigator.gotoDepotPortlet(
+			category = "People",
+			depotName = "Test Depot Name",
+			portlet = "Memberships");
+
+		LexiconEntry.changeDisplayStyle(displayStyle = "table");
+
+		LexiconEntry.viewNoEntry(rowEntry = "userfn userln");
+	}
+
+}

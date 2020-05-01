@@ -1,0 +1,92 @@
+{{error-messages model=model}}
+
+<form {{action "submit" on="submit"}}>
+  {{#fields-for model=model style="horizontal" as |f|}}
+    <fieldset class="form-horizontal condensed">
+      <legend>User Info</legend>
+
+      {{#if currentAdmin.permissions.admin_manage}}
+        {{f.text-field "username" label=(t "mongoid.attributes.admin.username")}}
+        {{#unless session.data.authenticated.username_is_email}}
+          {{f.text-field "email" label=(t "mongoid.attributes.admin.email")}}
+        {{/unless}}
+      {{else}}
+        {{f.static-field "username" label=(t "mongoid.attributes.admin.username")}}
+        {{#unless session.data.authenticated.username_is_email}}
+          {{f.static-field "email" label=(t "mongoid.attributes.admin.email")}}
+        {{/unless}}
+      {{/if}}
+      {{#if model.name}}
+        {{f.static-field "name" label=(t "mongoid.attributes.admin.name")}}
+      {{/if}}
+      {{#if currentAdmin.permissions.admin_manage}}
+        {{f.textarea-field "notes" label=(t "mongoid.attributes.admin.notes")}}
+        {{#if model.id}}
+          {{#unless model.currentSignInAt}}
+            {{f.checkbox-field "sendInviteEmail" label="Resend invite email"}}
+          {{/unless}}
+        {{else}}
+          {{f.checkbox-field "sendInviteEmail" label="Send invite email"}}
+        {{/if}}
+      {{else}}
+        {{f.static-field "notes" label=(t "mongoid.attributes.admin.notes")}}
+      {{/if}}
+    </fieldset>
+
+    {{#if model.authenticationToken}}
+      {{#if session.data.authenticated.local_auth_enabled}}
+        {{#if currentAdmin.permissions.admin_manage}}
+          <fieldset class="form-horizontal condensed">
+            <legend>{{t "devise.passwords.edit.change_your_password"}}</legend>
+
+            {{f.password-field "currentPassword" label=(t "mongoid.attributes.admin.current_password")}}
+            {{f.password-field "password" label=(t "devise.passwords.edit.new_password") hint=(t "devise.passwords.password_length_hint" min=session.data.authenticated.password_length_min)}}
+            {{f.password-field "passwordConfirmation" label=(t "devise.passwords.edit.confirm_new_password")}}
+          </fieldset>
+        {{/if}}
+      {{/if}}
+
+      <fieldset class="form-horizontal condensed">
+        <legend>Admin API Access</legend>
+
+        {{#f.static-field "authenticationToken" label=(t "mongoid.attributes.admin.authentication_token")}}
+          <span class="api-key">{{model.authenticationToken}}</span>
+        {{/f.static-field}}
+      </fieldset>
+    {{/if}}
+
+    {{#if currentAdmin.permissions.admin_manage}}
+      <fieldset class="form-horizontal condensed">
+        <legend>Permissions</legend>
+
+        {{f.checkboxes-field "groupIds" label=(t "mongoid.attributes.admin.groups") options=groupOptions}}
+        {{#if currentAdmin.superuser}}
+          {{f.checkbox-field "superuser" label=(t "mongoid.attributes.admin.superuser")}}
+        {{/if}}
+      </fieldset>
+    {{/if}}
+
+    <div class="row">
+      <div class="col-sm-6">
+        {{#if currentAdmin.permissions.admin_manage}}
+          <button type="submit" class="btn btn-lg btn-primary save-button"><span class="btn-label">Save</span><span class="btn-loading-label">{{fa-icon "sync-alt" spin=true}}Saving...</span></button>
+        {{/if}}
+      </div>
+      <div class="col-sm-6 record-details">
+        {{#if model.id}}
+          Created: {{format-date model.createdAt}} by {{model.creator.username}}<br>
+          Last Updated: {{format-date model.updatedAt}} by {{model.updater.username}}<br>
+          {{#if model.currentSignInAt}}Last Login: {{format-date model.currentSignInAt}} from {{model.currentSignInIp}} via {{model.currentSignInProvider}}<br>{{/if}}
+          Logged in: {{model.signInCount}} times<br>
+        {{/if}}
+      </div>
+    </div>
+    {{#if currentAdmin.permissions.admin_manage}}
+      {{#if model.id}}
+        <div class="form-extra-actions">
+          <a href="#" class="remove-action" {{action "delete"}}>{{fa-icon "times"}}Delete Admin</a>
+        </div>
+      {{/if}}
+    {{/if}}
+  {{/fields-for}}
+</form>

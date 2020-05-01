@@ -1,0 +1,37 @@
+plugins {
+    id "com.google.protobuf"
+}
+
+description = 'OpenTelemetry Examples for gRPC'
+ext.moduleName = "io.opentelemetry.examples.grpc"
+
+
+
+dependencies {
+    compile "io.opentelemetry:opentelemetry-api:${opentelemetryVersion}"
+    compile "io.opentelemetry:opentelemetry-sdk:${opentelemetryVersion}"
+    compile "io.opentelemetry:opentelemetry-exporters-logging:${opentelemetryVersion}"
+    compile "io.grpc:grpc-protobuf:${grpcVersion}"
+    compile "io.grpc:grpc-stub:${grpcVersion}"
+    compile "io.grpc:grpc-netty-shaded:${grpcVersion}"
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+// Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}

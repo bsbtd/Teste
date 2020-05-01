@@ -1,0 +1,328 @@
+// Spacers map copy
+
+$spacers-cp: ();
+$spacers-cp: map-deep-merge(
+	(
+		0: var(--spacer-0),
+		1: var(--spacer-1),
+		2: var(--spacer-2),
+		3: var(--spacer-3),
+		4: var(--spacer-4),
+		5: var(--spacer-5),
+		6: var(--spacer-6),
+		7: var(--spacer-7),
+		8: var(--spacer-8),
+	),
+	$spacers-cp
+);
+
+// Theme colors
+
+$theme-colors-cp: ();
+$theme-colors-cp: map-deep-merge(
+	(
+		primary: var(--primary),
+		secondary: var(--secondary),
+		success: var(--success),
+		info: var(--info),
+		warning: var(--warning),
+		danger: var(--danger),
+		light: var(--light),
+		lighter: var(--gray-100),
+		gray-dark: var(--gray-800),
+		dark: var(--dark),
+	),
+	$theme-colors-cp
+);
+
+:root {
+	// Colors
+
+	--white: #{$white};
+	--gray-100: #{$gray-100};
+	--gray-200: #{$gray-200};
+	--gray-300: #{$gray-300};
+	--gray-400: #{$gray-400};
+	--gray-500: #{$gray-500};
+	--gray-600: #{$gray-600};
+	--gray-700: #{$gray-700};
+	--gray-800: #{$gray-800};
+	--gray-900: #{$gray-900};
+	--black: #{$black};
+	--transparent: transparent;
+
+	@each $key, $value in $theme-colors {
+		--#{$key}: #{$value};
+	}
+
+	--primary-d1: #{$primary-d1};
+	--primary-l1: #{$primary-l1};
+	--primary-l3: #{$primary-l3};
+	--secondary-d1: var(--gray-800);
+	--success-d1: #{$success-d1};
+	--success-l1: #{$success-l1};
+	--success-l2: #{$success-l2};
+	--info-l1: #{$info-l1};
+	--info-l2: #{$info-l2};
+	--warning-l1: #{$warning-l1};
+	--warning-l2: #{$warning-l2};
+	--danger-l1: #{$danger-l1};
+	--danger-l2: #{$danger-l2};
+
+	// Spacers
+
+	--spacer: 1;
+	@each $key, $value in $spacers {
+		--spacer-#{$key}: #{$value};
+	}
+
+	// Container max
+
+	@each $key, $value in $container-max-widths {
+		--container-max-#{$key}: #{$value};
+	}
+
+	// Border radius
+	--border-radius-circle: 50%;
+	--border-radius-lg: #{$border-radius-lg};
+	--border-radius-sm: #{$border-radius-sm};
+	--border-radius: #{$border-radius};
+	--rounded-pill: #{$rounded-pill};
+
+	// Shadows
+
+	--box-shadow-sm: #{$box-shadow-sm};
+	--box-shadow: #{$box-shadow};
+	--box-shadow-lg: #{$box-shadow-lg};
+
+	// Fonts
+
+	--font-family-sans-serif: #{$font-family-sans-serif};
+	--font-family-monospace: #{$font-family-monospace};
+	--font-family-base: #{$font-family-base};
+
+	--font-size-sm: #{$font-size-sm};
+	--font-size-base: #{$font-size-base};
+	--font-size-lg: #{$font-size-lg};
+
+	--font-weight-light: #{$font-weight-light};
+	--font-weight-lighter: #{$font-weight-lighter};
+	--font-weight-normal: #{$font-weight-normal};
+	--font-weight-semi-bold: #{$font-weight-semi-bold};
+	--font-weight-bold: #{$font-weight-bold};
+	--font-weight-bolder: #{$font-weight-bolder};
+
+	--line-height-base: #{$line-height-base};
+	--line-height-sm: 1.15;
+
+	// Headings
+
+	--h1-font-size: #{$h1-font-size};
+	--h2-font-size: #{$h2-font-size};
+	--h3-font-size: #{$h3-font-size};
+	--h4-font-size: #{$h4-font-size};
+	--h5-font-size: #{$h5-font-size};
+	--h6-font-size: #{$h6-font-size};
+
+	// Body
+
+	--body-color: $body-color;
+	--body-bg: $body-bg;
+
+	// Buttons
+
+	--btn-primary-bg-dark: var(--primary-d1);
+	--btn-primary-bg: var(--primary);
+	--btn-primary-border: var(--primary);
+	--btn-primary-color: var(--white);
+
+	--btn-secondary-bg-dark: var(--gray-100);
+	--btn-secondary-bg: var(--white);
+	--btn-secondary-border: var(--gray-400);
+	--btn-secondary-color: var(--secondary);
+
+	--btn-padding-y: #{$btn-padding-y};
+	--btn-padding-x: #{$btn-padding-x};
+	--btn-font-size: #{$btn-font-size};
+	--btn-line-height: #{$btn-line-height};
+	--btn-border-radius: #{$btn-border-radius};
+
+	--btn-padding-y-lg: #{$btn-padding-y-lg};
+	--btn-padding-x-lg: #{$btn-padding-x-lg};
+	--btn-font-size-lg: #{$btn-font-size-lg};
+	--btn-line-height-lg: #{$btn-line-height-lg};
+	--btn-border-radius-lg: #{$btn-border-radius-lg};
+
+	--btn-padding-y-sm: #{$btn-padding-y-sm};
+	--btn-padding-x-sm: #{$btn-padding-x-sm};
+	--btn-font-size-sm: #{$btn-font-size-sm};
+	--btn-line-height-sm: #{$btn-line-height-sm};
+	--btn-border-radius-sm: #{$btn-border-radius-sm};
+
+	--btn-monospaced-padding-y: #{$btn-monospaced-padding-y};
+	--btn-monospaced-padding-x: #{$btn-monospaced-padding-x};
+	--btn-monospaced-size: #{$btn-monospaced-size};
+
+	--btn-monospaced-padding-y-sm: #{$btn-monospaced-padding-y-sm};
+	--btn-monospaced-padding-x-sm: #{$btn-monospaced-padding-x-sm};
+	--btn-monospaced-size-sm: #{$btn-monospaced-size-sm};
+
+	--btn-monospaced-padding-y-lg: #{$btn-monospaced-padding-y-lg};
+	--btn-monospaced-padding-x-lg: #{$btn-monospaced-padding-x-lg};
+	--btn-monospaced-size-lg: #{$btn-monospaced-size-lg};
+
+	--btn-section-font-size: #{$btn-section-font-size};
+	--btn-section-font-size-lg: #{$btn-section-font-size-lg};
+	--btn-section-font-size-sm: #{$btn-section-font-size-sm};
+
+	--btn-inline-item-font-size: #{$btn-inline-item-font-size};
+	--btn-inline-item-font-size-lg: #{$btn-inline-item-font-size-lg};
+	--btn-inline-item-font-size-sm: #{$btn-inline-item-font-size};
+	// $btn-inline-item-font-size-sm is not defined in Clay
+
+	// Alerts
+
+	--alert-padding-y: #{$alert-padding-y};
+	--alert-padding-x: #{$alert-padding-x};
+
+	--alert-primary-color: #{$alert-primary-color};
+	--alert-primary-bg: #{$alert-primary-bg};
+	--alert-primary-border-color: #{$alert-primary-border-color};
+
+	--alert-success-color: #{$alert-success-color};
+	--alert-success-bg: #{$alert-success-bg};
+	--alert-success-border-color: #{$alert-success-border-color};
+
+	--alert-info-color: #{$alert-info-color};
+	--alert-info-bg: #{$alert-info-bg};
+	--alert-info-border-color: #{$alert-info-border-color};
+
+	--alert-warning-color: #{$alert-warning-color};
+	--alert-warning-bg: #{$alert-warning-bg};
+	--alert-warning-border-color: #{$alert-warning-border-color};
+
+	--alert-danger-color: #{$alert-danger-color};
+	--alert-danger-bg: #{$alert-danger-bg};
+	--alert-danger-border-color: #{$alert-danger-border-color};
+
+	// Cards
+
+	--card-bg: #{$card-bg};
+	--card-border-color: #{$card-border-color};
+	--card-border-radius: #{$card-border-radius};
+	--card-border-width: #{$card-border-width};
+	--card-cap-bg: #{$card-cap-bg};
+	--card-cap-color: inherit;
+	--card-color: inherit;
+	--card-overflow: inherit;
+	--card-spacer-x: #{$card-spacer-x};
+	--card-spacer-y: #{$card-spacer-y};
+
+	// Forms
+
+	--input-bg: #{$input-bg};
+	--input-border-color: #{$input-border-color};
+	--input-border-radius: #{$input-border-radius};
+	--input-border-width: #{$input-border-width};
+	--input-color: #{$input-color};
+	--input-height: #{$input-height};
+	--input-group-inset-item-padding-left: #{$input-group-inset-item-padding-left};
+	--input-group-inset-item-padding-right: #{$input-group-inset-item-padding-right};
+	--input-line-height: #{$input-line-height};
+	--input-padding-x: #{$input-padding-x};
+	--input-padding-y: #{$input-padding-y};
+
+	--input-focus-color: #{$input-focus-color};
+	--input-focus-bg: #{$input-focus-bg};
+	--input-focus-border-color: #{$input-focus-border-color};
+
+	--custom-control-indicator-checked-border-color: #{$custom-control-indicator-checked-border-color};
+	--custom-control-indicator-checked-bg: #{$custom-control-indicator-checked-bg};
+
+	--input-label-font-size: inherit;
+	--input-label-margin-bottom: #{$input-label-margin-bottom};
+
+	--input-font-size-sm: #{$input-font-size-sm};
+	--input-height-sm: #{$input-height-sm};
+
+	--input-font-size-lg: #{$input-font-size-lg};
+	--input-height-lg: #{$input-height-lg};
+
+	// Nav and Navbar
+
+	--navbar-active-color: #{$navbar-light-active-color};
+	--navbar-brand-color: inherit;
+	--navbar-brand-font-size: #{$navbar-brand-font-size};
+	--navbar-color: #{$navbar-light-color};
+	--navbar-font-size: #{$navbar-font-size};
+	--navbar-hover-color: #{$navbar-light-hover-color};
+	--navbar-light-active-color: #{$navbar-light-active-color};
+	--navbar-light-hover-color: #{$navbar-light-hover-color};
+
+	--nav-font-size: #{$nav-font-size};
+	--nav-link-active-color: inherit;
+	--nav-link-color: inherit;
+	--nav-link-hover-color: inherit;
+	--nav-link-padding-x: #{$nav-link-padding-x};
+	--nav-link-padding-y: #{$nav-link-padding-y};
+
+	// Portlet vars
+
+	--portlet-bg: transparent;
+	--portlet-header-margin-bottom: calc(
+		var(--spacer) * #{$portlet-header-margin-bottom}
+	);
+	--portlet-content-border-radius: 0;
+
+	--portlet-topper-border-radius: var(--border-radius-sm)
+		var(--border-radius-sm) 0 0;
+	--portlet-topper-bg: var(--primary);
+	--portlet-topper-border: var(--portlet-topper-bg);
+	--portlet-topper-color: var(--white);
+	--portlet-topper-link-color: var(--portlet-topper-color);
+	--portlet-topper-link-hover-color: var(--portlet-topper-link-color);
+
+	// Table list
+
+	--table-cell-padding: #{$table-cell-padding};
+
+	--table-list-active-bg: #{$table-list-active-bg};
+
+	--table-list-font-size: inherit;
+
+	--table-list-bg: #{$table-list-bg};
+	--table-list-color: #{$table-list-color};
+
+	--table-list-head-bg: inherit;
+	--table-list-head-color: inherit;
+
+	--table-list-border-radius: #{$table-list-border-radius};
+	--table-list-border-color: #{$table-list-border-color};
+	--table-list-border-x-width: #{$table-list-border-x-width};
+	--table-list-border-y-width: #{$table-list-border-y-width};
+
+	--table-list-divider-bg: #{$table-divider-bg};
+	--table-list-divider-color: #{$table-divider-color};
+	--table-list-divider-padding-x: #{$table-list-divider-padding-x};
+	--table-list-divider-padding-y: #{$table-list-divider-padding-y};
+
+	// List group
+
+	--list-group-bg: #{$list-group-bg};
+	--list-group-border-color: #{$list-group-border-color};
+	--list-group-border-radius: #{$list-group-border-radius};
+	--list-group-border-width: #{$list-group-border-width};
+	--list-group-color: inherit;
+
+	--list-group-active-bg: #{$list-group-active-bg};
+	--list-group-active-border-color: #{$list-group-active-border-color};
+	--list-group-active-color: #{$list-group-active-color};
+
+	--list-group-font-size: inherit;
+	--list-group-item-padding-x: #{$list-group-item-padding-x};
+	--list-group-item-padding-y: #{$list-group-item-padding-y};
+
+	--list-group-header-bg: #{$list-group-header-bg};
+	--list-group-header-padding-x: #{$list-group-header-padding-x};
+	--list-group-header-padding-y: #{$list-group-header-padding-y};
+}

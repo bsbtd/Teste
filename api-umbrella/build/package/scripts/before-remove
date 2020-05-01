@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -e -u
+
+stop_service=false
+remove_service=false
+
+case "$1" in
+  # dpkg
+  remove)
+    stop_service=true
+    ;;
+  deconfigure|failed-upgrade|upgrade)
+    ;;
+
+  # rpm
+  0) # uninstall
+    stop_service=true
+    remove_service=true
+    ;;
+  1) # upgrade
+    ;;
+esac
+
+destdir="${DESTDIR:-}"
+
+if [ "$stop_service" = "true" ]; then
+  "$destdir/etc/init.d/api-umbrella" stop || true
+fi
+
+if [ "$remove_service" = "true" ]; then
+  if command -v chkconfig > /dev/null 2>&1; then
+    chkconfig --del api-umbrella
+  fi
+fi

@@ -1,0 +1,30 @@
+@import 'atlas-variables';
+
+@import 'variables';
+
+.page-editor__drag-preview {
+	cursor: grabbing;
+	height: 100%;
+	left: 0;
+	pointer-events: none;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: $dragPreviewLayer;
+
+	&__content {
+		background-color: rgba(225, 235, 255, 1);
+		border-radius: 4px;
+		color: $primary;
+		cursor: grabbing;
+		display: block;
+		font-size: 12px;
+		font-weight: 600;
+		height: 64px;
+		padding: 8px;
+		text-align: center;
+		text-overflow: ellipsis;
+		width: 116px;
+		word-wrap: break-word;
+	}
+}

@@ -1,0 +1,307 @@
+@component-name = "portal-wcm"
+definition {
+
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.main.component.name = "Site Pages Administration";
+
+	setUp {
+		TestCase.setUpPortalInstance();
+
+		User.firstLoginPG();
+
+		JSONGroup.addGroup(groupName = "Test Site Name");
+	}
+
+	tearDown {
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+		else {
+			JSONGroup.deleteGroupByName(groupName = "Test Site Name");
+		}
+	}
+
+	@description = "This is for LPS-110108. Add a Draft page and check label."
+	@priority = "4"
+	test AddDraftPageAndViewLabel {
+		property testray.component.names = "Site Pages Administration";
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Content Page Name");
+
+		Click(locator1 = "Icon#ANGLE_LEFT_BACK");
+
+		AssertTextEquals(
+			key_itemName = "Test Content Page Name",
+			locator1 = "SitePages#LIST_GROUP_ITEM_PAGE_STATUS",
+			value1 = "Draft");
+	}
+
+	@description = "This is for LPS-110108. Adding a fourth level child page and viewing it on Page admin."
+	@priority = "5"
+	test AddPageWithFourthLevelChildPagesToSite {
+		property testray.component.names = "Site Pages Administration";
+
+		JSONLayout.addPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "Site Page");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "First Level Child Page",
+			parentLayoutName = "Site Page");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "Second Level Child Page",
+			parentLayoutName = "First Level Child Page");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "Third Level Child Page",
+			parentLayoutName = "Second Level Child Page");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "Fourth Level Child Page",
+			parentLayoutName = "Third Level Child Page");
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		Page.view(
+			depth = "2",
+			pageName = "First Level Child Page",
+			privacy = "Public Pages");
+
+		Page.view(
+			depth = "3",
+			pageName = "Second Level Child Page",
+			privacy = "Public Pages");
+
+		Page.view(
+			depth = "4",
+			pageName = "Third Level Child Page",
+			privacy = "Public Pages");
+
+		Page.view(
+			depth = "5",
+			pageName = "Fourth Level Child Page",
+			privacy = "Public Pages");
+	}
+
+	@description = "This is for LPS-110108. Management Toolbar shows count of selected items and all visible items are selected after checking the Select All checkbox."
+	@priority = "5"
+	test CheckAndViewCountViaManagementToolbar {
+		property testray.component.names = "Site Pages Administration";
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Content Page Name 1");
+
+		PageEditor.clickPublish();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Content Page Name 2");
+
+		PageEditor.clickPublish();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		SitePages.checkPage(pageName = "Test Content Page Name 1");
+
+		AssertTextEquals(
+			locator1 = "ManagementBar#NAVBAR_TEXT",
+			value1 = "1 of 2 Selected");
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ManagementBar.clickSelectAllCheckbox();
+
+		SitePages.viewCheckboxChecked(pageName = "Test Content Page Name 1");
+
+		SitePages.viewCheckboxChecked(pageName = "Test Content Page Name 2");
+	}
+
+	@description = "This is for LPS-110108. The hovered item shows Add Page quick action and a Kebab menu with the actions available for that item. Clicking on item title navigates to the content."
+	@priority = "5"
+	test MouseOverNonRootPageAndViewPage {
+		property testray.component.names = "Site Pages Administration";
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Content Page Name 1");
+
+		PageEditor.clickPublish();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Content Page Name 2");
+
+		PageEditor.clickPublish();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addChildPage(
+			childPageName = "Child Content Page Name 1",
+			parentPageName = "Test Content Page Name 1");
+
+		PageEditor.clickPublish();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		SitePages.expandPageTree(depth = "2");
+
+		SitePages.checkPage(pageName = "Test Content Page Name 1");
+
+		MouseOver(
+			key_itemName = "Child Content Page Name 1",
+			locator1 = "SitePages#LIST_GROUP_ITEM");
+
+		AssertVisible(
+			key_pageName = "Child Content Page Name 1",
+			locator1 = "SitePages#LIST_GROUP_ITEM_PLUS_ICON");
+
+		SitePages.gotoPageMenuItem(
+			menuItem = "View",
+			pageName = "Child Content Page Name 1");
+
+		AssertVisible(locator1 = "Icon#EDIT_PENCIL");
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		Click(
+			key_pageName = "Test Content Page Name 1",
+			locator1 = "SitePages#LIST_GROUP_ITEM_ROW_ENTRY_TITLE_LINK");
+
+		AssertVisible(locator1 = "Icon#EDIT_PENCIL");
+
+		AssertTextEquals(
+			locator1 = "ControlMenu#HEADING",
+			value1 = "Test Content Page Name 1");
+	}
+
+	@description = "This is a test for LPS-76825. A user can search for a page from pages admin."
+	@priority = "5"
+	test SearchPages {
+		task ("Add two pages to root and add one child page") {
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Page One");
+
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Page Two");
+
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Page Three",
+				parentLayoutName = "Page One");
+		}
+
+		task ("Navigate to pages administration") {
+			SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+		}
+
+		task ("Search for all three pages and assert they all appear") {
+			Search.searchCP(searchTerm = "page");
+
+			AssertTextEquals(
+				locator1 = "//tr[1]/td[2]",
+				value1 = "Page One");
+
+			AssertTextEquals(
+				locator1 = "//tr[1]/td[3]",
+				value1 = "Page One");
+
+			AssertTextEquals(
+				locator1 = "//tr[2]/td[2]",
+				value1 = "Page Two");
+
+			AssertTextEquals(
+				locator1 = "//tr[2]/td[3]",
+				value1 = "Page Two");
+
+			AssertTextEquals(
+				locator1 = "//tr[3]/td[2]",
+				value1 = "Page Three");
+
+			AssertTextEquals(
+				locator1 = "//tr[3]/td[3]",
+				value1 = "Page One Page Three");
+		}
+
+		task ("Search for one page and assert only that page appears") {
+			Search.searchCP(searchTerm = "one");
+
+			AssertTextEquals(
+				locator1 = "//tr[1]/td[2]",
+				value1 = "Page One");
+
+			AssertTextEquals(
+				locator1 = "//tr[1]/td[3]",
+				value1 = "Page One");
+
+			AssertElementNotPresent(locator1 = "//tr/td[2][contains(.,'Page Two')]");
+
+			AssertElementNotPresent(locator1 = "//tr/td[2][contains(.,'Page Three')]");
+		}
+
+		task ("Search for child page and assert that page appears") {
+			Search.searchCP(searchTerm = "three");
+
+			AssertTextEquals(
+				locator1 = "//tr[1]/td[2]",
+				value1 = "Page Three");
+
+			AssertTextEquals(
+				locator1 = "//tr[1]/td[3]",
+				value1 = "Page One Page Three");
+
+			AssertElementNotPresent(locator1 = "//tr/td[2][contains(.,'Page One')]");
+
+			AssertElementNotPresent(locator1 = "//tr/td[2][contains(.,'Page Two')]");
+		}
+	}
+
+	@description = "This is for LPS-110108. Select non root item, it shows Add Page quick action and a Kebab menu with the actions available for that item."
+	@priority = "4"
+	test SelectNonRootPageAndViewPage {
+		property testray.component.names = "Site Pages Administration";
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addPage(pageName = "Test Content Page Name");
+
+		PageEditor.clickPublish();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		ContentPages.addChildPage(
+			childPageName = "Child Content Page Name",
+			parentPageName = "Test Content Page Name");
+
+		PageEditor.clickPublish();
+
+		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
+
+		SitePages.expandPageTree(depth = "2");
+
+		SitePages.checkPage(pageName = "Child Content Page Name");
+
+		AssertVisible(
+			key_pageName = "Child Content Page Name",
+			locator1 = "SitePages#LIST_GROUP_ITEM_PLUS_ICON");
+
+		SitePages.gotoPageMenuItem(
+			menuItem = "View",
+			pageName = "Child Content Page Name");
+
+		AssertVisible(locator1 = "Icon#EDIT_PENCIL");
+	}
+
+}

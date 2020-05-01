@@ -1,0 +1,357 @@
+definition {
+
+	macro addCP {
+		var key_userGroupName = "${userGroupName}";
+
+		LexiconEntry.gotoAdd();
+
+		PortletEntry.inputName(name = "${userGroupName}");
+
+		if ("${selectSiteTemplate}" == "true") {
+			Select(
+				locator1 = "UserGroupsEditUserGroup#PUBLIC_PAGES_SELECT",
+				value1 = "${siteTemplateName}");
+		}
+
+		Button.clickSave();
+
+		if (("${userGroupNameVariation}" == "Asterik") || ("${userGroupNameVariation}" == "Comma") || ("${userGroupNameVariation}" == "Number")) {
+			Alert.viewRequestFailedToComplete();
+
+			AssertTextEquals.assertPartialText(
+				locator1 = "Message#ERROR_1",
+				value1 = "The User Group Name cannot be blank, numeric or a reserved word such as null.");
+
+			AssertTextEquals.assertPartialText(
+				locator1 = "Message#ERROR_1",
+				value1 = "The User Group Name cannot contain the following invalid characters: , *.");
+		}
+		else if ("${userGroupNameVariation}" == "Duplicate") {
+			Alert.viewRequestFailedToComplete();
+
+			AssertTextEquals.assertPartialText(
+				locator1 = "Message#ERROR_1",
+				value1 = "Please enter a unique name.");
+		}
+		else if ("${userGroupNameVariation}" == "Null") {
+			Alert.viewRequiredField();
+		}
+		else {
+			Alert.viewSuccessMessage();
+
+			AssertTextEquals(
+				locator1 = "UserGroups#USER_GROUP_TABLE_NAME",
+				value1 = "${userGroupName}");
+		}
+	}
+
+	macro addSiteCP {
+		UserGroup.gotoActionsCmd(userGroupName = "${userGroupName}");
+
+		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Edit");
+
+		if (("${userGroupSite}" == "Community Site") || ("${userGroupSite}" == "Intranet Site")) {
+			Select(
+				locator1 = "UserGroupsEditUserGroup#PUBLIC_PAGES_SELECT",
+				value1 = "${userGroupSite}");
+
+			if ("${checkEnablePropagationCheckbox}" == "true") {
+				AssertChecked(locator1 = "UserGroupsEditUserGroup#ENABLE_PROPAGATION_PUBLIC_PAGE_CHECKBOX");
+			}
+			else {
+				Uncheck(locator1 = "UserGroupsEditUserGroup#ENABLE_PROPAGATION_PUBLIC_PAGE_CHECKBOX");
+			}
+		}
+
+		PortletEntry.save();
+	}
+
+	macro assignAllMembersCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		LexiconEntry.viewEntryName(rowEntry = "${userGroupName}");
+
+		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Assign Members");
+
+		LexiconEntry.gotoAdd();
+
+		SelectFrame(locator1 = "IFrame#DIALOG");
+
+		PortletEntry.selectAll();
+
+		SelectFrameTop();
+
+		AssertClick(
+			locator1 = "Button#ADD",
+			value1 = "Add");
+
+		Alert.viewSuccessMessage();
+	}
+
+	macro assignMemberCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		Pause(locator1 = "5000");
+
+		var key_rowEntry = "${userGroupName}";
+
+		AssertElementPresent(locator1 = "Icon#ROW_VERTICAL_ELLIPSIS");
+
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Assign Members",
+			rowEntry = "${userGroupName}");
+
+		AssertVisible(locator1 = "NavBar#USERS");
+
+		LexiconEntry.gotoAdd();
+
+		AssertElementPresent.assertVisible(locator1 = "Button#ADD");
+
+		SelectFrame(locator1 = "IFrame#DIALOG");
+
+		User.searchCP(searchTerm = "${userScreenName}");
+
+		var key_userScreenName = "${userScreenName}";
+
+		Check(locator1 = "UserGroupsAssignUsers#USER_TABLE_CHECKBOX");
+
+		Pause(locator1 = "5000");
+
+		SelectFrameTop();
+
+		AssertClick.assertTextClickAtWaitForLastScript(
+			locator1 = "Button#ADD",
+			value1 = "Add");
+
+		Alert.viewSuccessMessage();
+
+		AssertTextEquals(
+			locator1 = "UserGroupsAssignUsers#USER_TABLE_SCREEN_NAME",
+			value1 = "${userScreenName}");
+	}
+
+	macro deleteCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		Pause(locator1 = "5000");
+
+		var key_userGroupName = "${userGroupName}";
+
+		AssertTextEquals(
+			locator1 = "UserGroups#USER_GROUP_TABLE_NAME",
+			value1 = "${userGroupName}");
+
+		LexiconEntry.gotoEntryMenuItemNoError(
+			menuItem = "Delete",
+			rowEntry = "${userGroupName}");
+
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+
+		Alert.viewSuccessMessage();
+
+		AssertElementNotPresent(locator1 = "UserGroups#USER_GROUP_TABLE_NAME");
+	}
+
+	macro deleteUserCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		Pause(locator1 = "5000");
+
+		var key_userGroupName = "${userGroupName}";
+
+		AssertTextEquals(
+			locator1 = "UserGroups#USER_GROUP_TABLE_NAME",
+			value1 = "${userGroupName}");
+
+		LexiconEntry.gotoEntryMenuItemNoError(
+			menuItem = "Delete",
+			rowEntry = "${userGroupName}");
+
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+
+		Alert.viewRequestFailedToComplete();
+
+		AssertTextEquals.assertPartialText(
+			locator1 = "Message#ERROR_1",
+			value1 = "You cannot delete user groups that have users.");
+	}
+
+	macro editCP {
+		Pause(locator1 = "5000");
+
+		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Edit");
+
+		PortletEntry.inputName(name = "${userGroupNameEdit}");
+
+		PortletEntry.save();
+	}
+
+	macro gotoActionsCmd {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		Pause(locator1 = "5000");
+
+		LexiconEntry.viewEntryName(rowEntry = "${userGroupName}");
+	}
+
+	macro gotoAddPageCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		LexiconEntry.gotoEllipsisMenuItem(
+			menuItem = "Manage Pages",
+			rowEntry = "${userGroupName}");
+	}
+
+	macro removeMemberCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		Pause(locator1 = "5000");
+
+		LexiconEntry.viewEntryName(rowEntry = "${userGroupName}");
+
+		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Assign Members");
+
+		var key_userScreenName = "${userScreenName}";
+
+		Check(locator1 = "UserGroupsAssignUsers#USER_TABLE_CHECKBOX");
+
+		ClickNoError(locator1 = "Icon#REMOVE");
+
+		Alert.viewSuccessMessage();
+	}
+
+	macro searchCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		LexiconEntry.viewEntryName(rowEntry = "${userGroupName}");
+
+		Search.searchCP(searchTerm = "UG1 UserGroup1 Name1");
+
+		LexiconEntry.viewNoEntry(rowEntry = "${userGroupName}");
+	}
+
+	macro tearDownCP {
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "User Groups");
+
+		if (IsElementNotPresent(locator1 = "Message#EMPTY_INFO")) {
+			PortletEntry.selectAll();
+
+			ClickNoError(locator1 = "Icon#DELETE");
+
+			AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+
+			Alert.viewSuccessMessage();
+
+			AssertTextEquals(
+				locator1 = "Message#INFO",
+				value1 = "No user groups were found.");
+		}
+	}
+
+	macro viewAssignMemberCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		var key_userGroupName = "${userGroupName}";
+
+		AssertTextEquals(
+			locator1 = "UserGroups#USER_GROUP_TABLE_NAME",
+			value1 = "${userGroupName}");
+
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Assign Members",
+			rowEntry = "${userGroupName}");
+
+		AssertTextEquals(
+			key_userScreenName = "${userScreenName}",
+			locator1 = "UserGroupsAssignUsers#USER_TABLE_SCREEN_NAME",
+			value1 = "${userScreenName}");
+	}
+
+	macro viewCP {
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		Pause(locator1 = "5000");
+
+		var key_userGroupName = "${userGroupName}";
+
+		AssertTextEquals(
+			locator1 = "UserGroups#USER_GROUP_TABLE_NAME",
+			value1 = "${userGroupName}");
+
+		AssertElementPresent(locator1 = "Icon#BODY_VERTICAL_ELLIPSIS");
+
+		AssertElementPresent(locator1 = "Checkbox#LEXICON_SELECT_ALL_INPUT");
+
+		AssertElementPresent(locator1 = "UserGroups#USER_GROUP_TABLE_CHECKBOX");
+
+		AssertElementPresent(locator1 = "Button#PLUS");
+
+		AssertElementPresent(locator1 = "TextInput#SEARCH");
+
+		AssertElementPresent(locator1 = "Button#SUBMIT");
+	}
+
+	macro viewDefault {
+		AssertTextEquals(
+			locator1 = "Message#EMPTY_INFO",
+			value1 = "No user groups were found.");
+	}
+
+	macro viewPG {
+		Pause(locator1 = "5000");
+
+		var key_userGroupName = "${userGroupName}";
+
+		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Edit");
+
+		AssertClick.assertPartialTextClickAt(
+			locator1 = "UserGroupsEditUserGroup#PUBLIC_PAGES_OPEN_PAGES",
+			value1 = "Open Pages");
+
+		SelectWindow(locator1 = "Home - ${userGroupName} - ${siteName}");
+
+		AssertTextEquals(
+			locator1 = "Home#SITE_NAME",
+			value1 = "${userGroupName}");
+
+		var key_portletName = "${portletName}";
+
+		AssertTextEquals(
+			locator1 = "Portlet#TITLE",
+			value1 = "${portletName}");
+
+		Close(locator1 = "Home - ${userGroupName} - ${siteName}");
+	}
+
+	macro viewPortletCP {
+		AssertElementPresent(locator1 = "Button#PLUS");
+
+		AssertElementPresent(locator1 = "TextInput#SEARCH");
+
+		AssertElementPresent(locator1 = "Button#SUBMIT");
+
+		AssertElementPresent(locator1 = "Icon#HEADER_VERTICAL_ELLIPSIS");
+
+		AssertElementPresent(locator1 = "Message#EMPTY_INFO");
+	}
+
+	macro viewRemoveMemberCP {
+		var key_userGroupName = "${userGroupName}";
+
+		Search.searchCP(searchTerm = "${userGroupName}");
+
+		AssertTextEquals(
+			locator1 = "UserGroups#USER_GROUP_TABLE_NAME",
+			value1 = "${userGroupName}");
+
+		AssertClick(
+			locator1 = "UserGroups#USER_GROUP_TABLE_NAME_LINK",
+			value1 = "${userGroupName}");
+
+		AssertTextNotPresent(value1 = "${userFirstName}");
+	}
+
+}

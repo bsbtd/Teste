@@ -1,0 +1,40 @@
+{
+	"fieldSets": [
+		{
+			"fields": [
+				{
+					"dataType": "string",
+					"defaultValue": "3",
+					"label": "bottom-spacing",
+					"name": "bottomSpacing",
+					"type": "select",
+					"typeOptions": {
+						"validValues": [
+							{
+								"value": "1"
+							},
+							{
+								"value": "2"
+							},
+							{
+								"value": "3"
+							},
+							{
+								"value": "4"
+							},
+							{
+								"value": "5"
+							}
+						]
+					}
+				},
+				{
+					"dataType": "object",
+					"label": "border-color",
+					"name": "borderColor",
+					"type": "colorPalette"
+				}
+			]
+		}
+	]
+}

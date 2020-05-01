@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -e -u -x
+
+source_dir="$(dirname "$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")")"
+
+# shellcheck source=tasks/helpers/detect_os_release.sh
+source "$source_dir/tasks/helpers/detect_os_release.sh"
+detect_os_release
+if [[ "$ID_NORMALIZED" == "rhel" ]]; then
+  yum -y install git rsync
+elif [[ "$ID_NORMALIZED" == "debian" ]]; then
+  apt-get update
+  DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install git rsync
+fi
+
+# Create a clean copy of the source directory.
+#
+# This allows for the builds to take place independent of any extraneous files
+# that might be present in a development sandbox, or for development setups
+# where things like build/work might be symlinked inside a vagrant box).
+clean_source_dir="/tmp/api-umbrella-$DIST"
+rsync -a --delete-after --delete-excluded "--filter=:- $source_dir/.gitignore" "$source_dir/" "$clean_source_dir/"
+cd "$clean_source_dir"
+git clean -d -f -x
+
+# Install any system dependencies for building.
+"$clean_source_dir/tasks/install-system-build-dependencies"
+
+# Perform an out-of-source build.
+build_dir="/tmp/api-umbrella-build-$DIST"
+rm -rf "$build_dir"
+mkdir -p "$build_dir"
+cd "$build_dir"
+
+"$clean_source_dir/configure"
+make
+make package
+
+# Copy the packages for this distro back to the source directory so it's
+# available on the host machine, outside the docker build container.
+rm -rf "$source_dir/build/package/work/current/$DIST"
+mkdir -p "$source_dir/build/package/work/current/$DIST"
+cp -r "$build_dir/build/package/work/build"/* "$source_dir/build/package/work/current/$DIST/"

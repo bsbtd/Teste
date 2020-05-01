@@ -1,0 +1,9 @@
+Bundle-Name: Liferay Asset Publisher Web
+Bundle-SymbolicName: com.liferay.asset.publisher.web
+Bundle-Version: 4.0.20
+Import-Package:\
+	com.liferay.portal.kernel.portlet;version="[10.0.0,10.1)",\
+	\
+	*
+Web-ContextPath: /asset-publisher-web
+-dsannotations-options: inherit

@@ -1,0 +1,509 @@
+<html>
+<head>
+<title>PageEditor</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">PageEditor</td></tr>
+</thead>
+<tbody>
+<tr>
+	<td>AUTOSAVE_MESSAGE</td>
+	<td>//div[contains(@class,'management-bar')]//span[contains(@class,'navbar-text')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EMPTY_MESSAGE</td>
+	<td>//div[contains(@class,'empty-result-message')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_DROP_TARGET</td>
+	<td>//div[contains(@class,'page-editor__root page-editor__topper')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FOOTER_DROP_TARGET</td>
+	<td>//button[contains(.,'Configure Allowed Fragments')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>LIST_GROUP_ITEM</td>
+	<td>//div[contains(@class,'list-group')]//a[contains(.,'${key_itemName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--CREATE_NEW_CONTENT_FORM-->
+<tr>
+	<td>CONTENT_NAME_FIELD</td>
+	<td>//div[contains(@class,'form-group') and label[contains(.,'${key_fieldName}')]]//input</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_VALUE_FIELD</td>
+	<td>//div[h3[contains(.,'Content Value')]]//input</td>
+	<td></td>
+</tr>
+<tr>
+	<td>STRUCTURE_FIELD_SELECT</td>
+	<td>//div[contains(.,'Structure Field')]//select</td>
+	<td></td>
+</tr>
+<!--FRAGMENT_SIDEBAR-->
+<tr>
+	<td>FRAGMENT_SIDEBAR</td>
+	<td>//div[contains(@class,'page-editor__sidebar__buttons')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_BACK</td>
+	<td>//button[*[name()='svg'][contains(@class,'lexicon-icon-angle-left')]]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_TAB_COLLAPSED</td>
+	<td>//button[@title='${key_tabName}' and contains(@aria-pressed,'false')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENTS</td>
+	<td>//div[contains(@class,'alloy-editor-container') and contains(@id,'pageEditorCommentEditor')]/div[contains(@data-placeholder,'Type your comment here.')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENTS_EDITOR</td>
+	<td>xpath=(//div[contains(@class,'alloy-editor-container') and contains(@id,'pageEditorCommentEditor')]/div[contains(@data-placeholder,'Type your comment here.')])[last()]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENT_ENTRY</td>
+	<td>//div[contains(@class,'text-secondary')]/p[contains(.,'${key_fragmentComment}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENT_ENTRY_HIGHLIGHTED</td>
+	<td>//article[contains(@class,'highlighted')]/div[contains(@class,'text-secondary')]/p[contains(.,'${key_fragmentComment}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENT_ENTRY_INPUT</td>
+	<td>//div[contains(@class,'alloy-editor-container') and contains(@id,'pageEditorCommentEditor')]/div[contains(@data-placeholder,'Type your comment here.')]/p[contains(.,'${fragmentComment}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENT_LIST_HEADING</td>
+	<td>//strong[contains(@class,'text-dark') and contains(.,'${key_fragmentName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENT_LIST_SECONDARY_TEXT</td>
+	<td>//span[contains(@class,'text-secondary') and contains(.,'${key_commentCount}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENT_LIST_TITLE</td>
+	<td>//h1[contains(@class,'page-editor__sidebar__panel-header')and contains(.,'Comments')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COMMENT_SECTION_NAME</td>
+	<td>//h1[contains(@class,'page-editor__sidebar__panel-header')]//span[contains(.,'${key_fragmentName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_ENTRY_N</td>
+	<td>xpath=(//div[contains(@class,'page-editor-sidebar')]//li[contains(@class,'page-editor__contents__page-content')])[${key_rowNumber}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_ELLIPSIS</td>
+	<td>//div[contains(@class,'sidebar')]//button[*[contains(@class,'lexicon-icon-ellipsis-v')]]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_LOADED</td>
+	<td>//div[contains(@class,'sidebar')]/div[contains(@class,'buttons')]/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_REPLY_COMMENTS_EDITOR</td>
+	<td>//div[contains(@class,'alloy-editor-container') and contains(@id,'pageEditorCommentReplyEditor')]/div[contains(@data-placeholder,'Type your comment here.')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_REPLY_COMMENTS_ENTRY</td>
+	<td>xpath=(//div[contains(@class,'text-secondary')]/p[contains(.,'${key_commentReply}')])[last()]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_REPLY_COMMENTS_ENTRY_AUTHOR</td>
+	<td>xpath=(//article[contains(@class,'reply') and contains(.,'${key_commentReply}')]//strong[contains(@class,'portal-tooltip')])</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_REPLY_COMMENTS_ENTRY_HIGHLIGHTED</td>
+	<td>xpath=(//article[contains(@class,'highlighted')]/div[contains(@class,'text-secondary')]/p[contains(.,'${key_commentReply}')])[last()]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_REPLY_RESOLVED_COMMENTS_ENTRY</td>
+	<td>xpath=(//article[contains(@class,'fragment-comment--reply') and contains(@class,'fragment-comment--resolved')]//div/p[contains(.,'${key_commentReply}')])[last()]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_RESOLVED_COMMENTS_ENTRY</td>
+	<td>//article[contains(@class,'fragment-comment--resolved')]//div/p[contains(.,'${key_fragmentComment}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COLLECTION_PANEL</td>
+	<td>//*[normalize-space()='${key_collectionName}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COLLECTION_PANEL_COLLAPSED</td>
+	<td>//*[contains(@class,'sheet-subtitle collapsed')][normalize-space()='${key_collectionName}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_COLLECTION_PANEL_EXPANDED</td>
+	<td>//*[@class='collapse-icon sheet-subtitle'][normalize-space()='${key_collectionName}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_CENTER_TEXT</td>
+	<td>//div[contains(@class,'text-center')]/h1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_SECONDARY_TEXT</td>
+	<td>//div[contains(@class,'text-center')]/p</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_SECTION_TITLE</td>
+	<td>//div[contains(@class,'page-editor')]/div/h1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_SHOW_RESOLVED_COMMENTS_LABEL</td>
+	<td>//span[contains(@class,'custom-control-label-text') and contains(.,'Show Resolved Comments')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_SHOW_RESOLVED_COMMENTS_CHECKBOX_DISABLED</td>
+	<td>//input[contains(@class,'custom-control-input')][@disabled='']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_SHOW_RESOLVED_COMMENTS_CHECKBOX_UNCHECKED</td>
+	<td>//label/input[@type='checkbox']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_TAB_BUTTON</td>
+	<td>//div[contains(@class,'page-editor__sidebar__buttons')]//*[contains(@title,'${key_tabName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_TAB_BUTTON_ACTIVE</td>
+	<td>//button[contains(@title,'${key_tabName}')][contains(@aria-pressed,'true')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_SIDEBAR_TITLE</td>
+	<td>//div[contains(@class,'content--open')]//h1[contains(@class,'page-editor__sidebar__panel-header') and contains(.,'${key_sidebarButton}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--CONTENT_PAGE-->
+<tr>
+	<td>CONTENT_PAGE_DISABLED_HEADER</td>
+	<td>//header[contains(@class,'disabled-area')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_PAGE_DISABLED_FOOTER</td>
+	<td>//footer[contains(@class,'disabled-area')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_PAGE_DISABLED_POPOVER</td>
+	<td>//div[contains(@class,'clay-popover')][not(contains(@class,'sr-only'))]//div[@class='popover-body']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_PAGE_IMAGE_CONTENT</td>
+	<td>//div[contains(@style,'${key_imageFileName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_PAGE_TEXT_CONTENT</td>
+	<td>//div[contains(@class,'widget-content')]/p | //div[contains(@class,'asset-summary')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_PAGE_WEB_CONTENT_CONTENT</td>
+	<td>//div[contains(@class,'journal-content-article')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--EXPERIENCE-->
+<tr>
+	<td>EXPERIENCE_BUTTON_NAME</td>
+	<td>//div[contains(@class,'page-editor__toolbar-experience')]/button[contains(.,'${key_experienceName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EXPERIENCE_DEFAULT_BUTTON_NAME</td>
+	<td>//div[contains(@class,'page-editor__toolbar-experience')]/button[contains(.,'Default')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EXPERIENCE_SELECT_ITEM</td>
+	<td>//span[contains(@class,'text-truncate')]/strong[contains(.,'${key_experienceName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EXPERIENCE_LABEL</td>
+	<td>//div[contains(@class,'page-editor__toolbar-experience')]/label[contains(.,'Experience')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EXPERIENCE_NAME</td>
+	<td>//input[contains(@id,'segmentsExperienceName')]</td>
+	<td></td>
+</tr>
+<!--LANGUAGE_MENU-->
+<tr>
+	<td>DROPDOWN</td>
+	<td>//button[contains(@class,'dropdown-toggle')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--FOOTER_FRAGMENT-->
+<tr>
+	<td>FOOTERS</td>
+	<td>//footer[contains(@class,'navbar-${key_type}')]</td>
+	<td></td>
+</tr>
+<!--HEADER_FRAGMENT-->
+<tr>
+	<td>NAVIGATION_BARS</td>
+	<td>//header[contains(@class,'navbar-${key_type}')]</td>
+	<td></td>
+</tr>
+<!--LAYOUT ELEMENTS-->
+<tr>
+	<td>LAYOUT_ELEMENTS_HEADER</td>
+	<td>//div[contains(@class,'page-editor__root page-editor__topper')]/div[contains(.,'${key_elementType}')][${key_position}]//li[contains(@class,'title')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>LAYOUT_ELEMENTS_HEADER_DELETE_BUTTON</td>
+	<td>//div[contains(@class,'page-editor__root page-editor__topper')]/div[contains(.,'${key_elementType}')][${key_position}]//button[*[name()='svg'][*[contains(@class,'times-circle')]]]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ROW_COLUMN</td>
+	<td>//div[contains(@class,'page-editor__topper') and contains(.,'Row')][${key_position}]//div[contains(@class,'page-editor__col')][${key_columnNumber}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ROW_COLUMN_NESTED_ELEMENT</td>
+	<td>//div[contains(@class,'page-editor__topper') and contains(.,'Row')][${key_position}]//div[contains(@class,'page-editor__col')][${key_columnNumber}]${key_elementHeader}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_CONTAINER</td>
+	<td>//div[contains(@class,'page-editor__topper') and contains(.,'Section')][${key_position}]//div[contains(@class,'page-editor__container')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_CONTAINER_NESTED_ELEMENT</td>
+	<td>//div[contains(@class,'page-editor__topper')]/div[contains(.,'Section')][${key_position}]//div[@class='container']${key_elementHeader}</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--LAYOUT_ELEMENTS_CONFIGURATION-->
+<tr>
+	<td>ROW_CONFIGURATION_COLUMNS_NO_GUTTER</td>
+	<td>//div[contains(@class,'page-editor__topper')]/div[contains(.,'Row')][${key_position}]//div[contains(@class,'page-editor__row') and contains(@class,'no-gutters')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_CONFIGURATION_BACKGROUND_COLOR</td>
+	<td>//div[contains(@class,'page-editor__topper')]/div[contains(.,'Section')][${key_position}]//div[contains(@class,'page-editor__container')][contains(@class,'bg-${key_paletteItem}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_CONFIGURATION_BACKGROUND_IMAGE</td>
+	<td>//div[contains(@class,'page-editor__topper')]/div[contains(.,'Section')][${key_position}]//div[contains(@class,'page-editor__container')][contains(@style,'${key_imageName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_CONFIGURATION_CONTAINER</td>
+	<td>//div[contains(@class,'page-editor__topper')]/div[contains(.,'Section')][${key_position}]//div[contains(@class,'page-editor__container')]/div[@class='container-${key_container}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_CONFIGURATION_PADDING_BOTTOM</td>
+	<td>//div[contains(@class,'page-editor__topper')]/div[contains(.,'Section')][${key_position}]//div[contains(@class,'page-editor__container')][contains(@class,'pb-${key_paddingBottom}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_CONFIGURATION_PADDING_HORIZONTAL</td>
+	<td>//div[contains(@class,'page-editor__topper')]/div[contains(.,'Section')][${key_position}]//div[contains(@class,'page-editor__container')][contains(@class,'px-${key_paddingHorizontal}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_CONFIGURATION_PADDING_TOP</td>
+	<td>//div[contains(@class,'page-editor__topper')]/div[contains(.,'Section')][${key_position}]//div[contains(@class,'page-editor__container')][contains(@class,'pt-${key_paddingTop}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--EDITABLE_FIELD_TOOLBAR-->
+<tr>
+	<td>EDITABLE_FIELD_TOOLBAR_EDIT_BUTTON</td>
+	<td>//button[@*='Edit']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EDITABLE_FIELD_TOOLBAR_LINK_BUTTON</td>
+	<td>//button[@*='Link']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EDITABLE_FIELD_TOOLBAR_MAP_BUTTON</td>
+	<td>//button[@*='Map']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EDITABLE_FIELD_TOOLBAR_MAP_ASSET_SELECT_POPUP_BUTTON</td>
+	<td>//div/input[contains(@id,'itemSelectorInput')]/following-sibling::button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EDITABLE_FIELD_TOOLBAR_IMAGE_PROPERTIES_BUTTON</td>
+	<td>//button[@*='Image Properties']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>EDITABLE_FIELD_TOOLBAR_LAYOUT_BACKGROUND_IMAGE_BUTTON</td>
+	<td>//button[@data-panel-id='layout_background_image']</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--FRAGMENT_BODY_TOOLBAR-->
+<tr>
+	<td>FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON</td>
+	<td>//button[@*='${key_elementType} Configuration']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_BODY_TOOLBAR_DUPLICATE_BUTTON</td>
+	<td>//button[@*='Duplicate']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FRAGMENT_BODY_FLOATING_TOOLBAR_PLUS_BUTTON</td>
+	<td>//div[contains(@class,'floating-toolbar')]//div[contains(@class,'form-group')]//button[*[name()='svg'][contains(@class,'plus')]]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--SECTION_BUILDER-->
+<tr>
+	<td>SECTION_BUILDER_FRAGMENTS</td>
+	<td>//div[contains(@class,'page-editor')]//div[contains(@class,'card') and contains(.,'${key_fragmentName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SECTION_BUILDER_LAYOUT_ELEMENTS</td>
+	<td>//div[contains(@class,'page-editor')]//button[@aria-label='${key_elementType}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--WIDGETS-->
+<tr>
+	<td>WIDGETS_APPLICATION_SEARCH_FIELD</td>
+	<td>//div[contains(@class,'page-editor')]//div[@role='search']//input[contains(@placeholder,'Search')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>WIDGETS_ADD_PORTLET_DRAG_BUTTON</td>
+	<td>//button[contains(.,'${key_portletName}') and contains(@draggable,'true')]</td>
+	<td></td>
+</tr>
+<!--BASED_ON_CUSTOM_MASTERS-->
+<tr>
+	<td>FRAGMENT_INHERITED_FROM_CUSTOM_MASTERS</td>
+	<td>//div[contains(@class,'fragment-content--master')]//*[contains(@class,'component-${key_fragmentName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>OUTSIDE_OF_DROP_ZONE</td>
+	<td>//section[contains(@class,'container')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PORTLET_INHERITED_FROM_CUSTOM_MASTERS</td>
+	<td>//div[contains(@class,'fragment-content--master')]//section[contains(.,'${key_portletName}')]</td>
+	<td></td>
+</tr>
+<!--COLLECTION_DISPLAY-->
+<tr>
+	<td>COLLECTION_CELL</td>
+	<td>//div[contains(@class,'collection-item') and contains(.,'${key_entryTitle}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>COLLECTION_CELL_NESTED_ELEMENT</td>
+	<td>//div[contains(@class,'page-editor__topper') and contains(.,'${key_fragmentName}')]//div[contains(@class,'page-editor__collection')]/div[@class='row'][${key_rowPosition}]/div[contains(@class,'col')][${key_colPosition}]${key_element}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>COLLECTION_ITEM_TITLE</td>
+	<td>//div[contains(@class,'page-editor__topper') and contains(.,'${key_fragmentName}')]//div[contains(@class,'page-editor__collection')]/div[@class='row'][${key_rowPosition}]/div[contains(@class,'col')][${key_colPosition}]//*[contains(@class,'item__title') and contains(.,'${key_entryTitle}')]</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

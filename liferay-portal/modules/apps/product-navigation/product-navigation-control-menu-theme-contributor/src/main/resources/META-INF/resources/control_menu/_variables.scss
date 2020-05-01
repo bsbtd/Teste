@@ -1,0 +1,24 @@
+$admin-panel-width: 320px;
+$admin-panel-zindex: 990 !default;
+
+$control-menu-focus-box-shadow: 0 0 0 2px $white, 0 0 0 4px $primary-l1 !default;
+
+$control-menu-css-transition: all 0.5s ease !default;
+
+$control-menu-level-1-active-border: $primary-l1 !default;
+$control-menu-level-1-active-border-width: 2px !default;
+$control-menu-level-1-bg: $dark-l1 !default;
+$control-menu-level-1-color: $gray-500 !default;
+$control-menu-level-1-link-color: $gray-500 !default;
+$control-menu-level-1-link-hover-color: $white !default;
+$control-menu-level-1-link-background-color: fade_out($white, 0.97) !default;
+
+$control-menu-level-2-bg: $white !default;
+$control-menu-level-2-color: $dark !default;
+$control-menu-level-2-label-color: $dark !default;
+$control-menu-level-2-link-color: $secondary !default;
+
+$control-menu-zindex: $admin-panel-zindex - 1 !default;
+
+$has-control-menu-margin-top-desktop: 56px;
+$has-control-menu-margin-top-mobile: 48px;

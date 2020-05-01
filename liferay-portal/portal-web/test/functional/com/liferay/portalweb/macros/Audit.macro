@@ -1,0 +1,41 @@
+definition {
+
+	macro searchCP {
+		if ("${searchTerm}" == "${resourceAction}") {
+			var reportFieldKey = "RESOURCE_ACTION";
+		}
+		else if ("${searchTerm}" == "${resourceId}") {
+			var reportFieldKey = "RESOURCE_ID";
+		}
+		else if ("${searchTerm}" == "${resourceName}") {
+			var reportFieldKey = "RESOURCE_NAME";
+		}
+		else if ("${searchTerm}" == "${userId}") {
+			var reportFieldKey = "USER_ID";
+		}
+		else if ("${searchTerm}" == "${userName}") {
+			var reportFieldKey = "USER_NAME";
+		}
+
+		Click(locator1 = "Icon#ADVANCED_SEARCH");
+
+		Select(
+			locator1 = "AuditReports#ADVANCED_SEARCH_MATCH_SELECT",
+			value1 = "Any");
+
+		Type(
+			locator1 = "AuditReports#ADVANCED_SEARCH_${reportFieldKey}_FIELD",
+			value1 = "${searchTerm}");
+
+		AssertClick(
+			locator1 = "Button#SEARCH",
+			value1 = "Search");
+
+		Click(locator1 = "Icon#ADVANCED_SEARCH");
+
+		AssertTextEquals(
+			locator1 = "AuditReports#REPORTS_TABLE_${reportFieldKey}_1",
+			value1 = "${searchTerm}");
+	}
+
+}

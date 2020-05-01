@@ -1,0 +1,137 @@
+body {
+  padding-top: 66px;
+}
+
+.code-block,
+.tippy-tooltip pre {
+  background-color: $light;
+  border: $card-border-width solid $card-border-color;
+  @include border-radius($card-border-radius);
+  padding: 0.5rem;
+}
+
+.navbar .navbar-brand {
+  font-weight: bold;
+}
+
+.button-actions {
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.button-actions-down {
+  position: relative;
+  height: 0px;
+  margin: 0px;
+  z-index: 999;
+}
+
+.arrow {
+  margin-top: 24px;
+  text-align: center;
+  color: $gray-600;
+  font-size: 12px;
+  line-height: 12px;
+
+  .svg-inline--fa {
+    color: lighten($gray-600, 16%);
+    vertical-align: middle;
+  }
+}
+
+.arrow-vertical {
+  margin: 0px;
+}
+
+.arrow-vertical i {
+  vertical-align: middle;
+}
+
+a.remove-action {
+  font-size: 12px;
+  vertical-align: middle;
+  color: $danger;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.api-key {
+  font-family: $font-family-monospace;
+}
+
+.record-details {
+  text-align: right;
+  font-size: 11px;
+  line-height: 13px;
+  color: $text-muted;
+}
+
+.query-syntax-help .example {
+  text-align: right;
+}
+
+.query-syntax-help td.example {
+  font-style: italic;
+  font-size: 11px;
+}
+
+.diff {
+  del {
+    text-decoration: none;
+    background: #fdd;
+  }
+
+  ins {
+    text-decoration: none;
+    background: #dfd;
+  }
+}
+
+.dropdown-menu {
+  .fa {
+    /* Make the icons a consistent width so the menu text lines up */
+    width: 16px;
+    text-align: center;
+  }
+}
+
+.publish-toggle-checkboxes {
+  margin: -28px 0px 32px 17px;
+  text-align: center;
+  width: 80px;
+  font-size: 85%;
+}
+
+.control-group-negative-top {
+  margin-top: -16px;
+}
+
+#version_footer .row-fluid {
+  border-top: 1px solid $gray-200;
+  text-align: center;
+  margin-top: 3em;
+  margin-bottom: 1em;
+  padding-top: 1em;
+  font-size: 11px;
+  color: $text-muted;
+}
+
+// For when we want to submit a form with the enter key, but don't want a real
+// submit button visible in the form (eg, in modals where the submit button is
+// in the modal footer and not inside the <form> tag):
+// http://stackoverflow.com/q/477691
+.hidden-submit-button {
+  position: absolute;
+  left: -9999px;
+  height: 0px;
+  width: 0px;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.btn-light {
+  @include button-variant($gray-300, $gray-300);
+}

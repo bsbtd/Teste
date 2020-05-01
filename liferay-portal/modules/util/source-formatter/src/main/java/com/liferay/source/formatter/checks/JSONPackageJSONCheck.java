@@ -1,0 +1,128 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.source.formatter.checks;
+
+import com.liferay.petra.string.StringBundler;
+import com.liferay.source.formatter.util.FileUtil;
+
+import java.io.IOException;
+
+import java.util.Objects;
+
+import org.json.JSONObject;
+
+/**
+ * @author Alan Huang
+ * @author Hugo Huijser
+ */
+public class JSONPackageJSONCheck extends BaseFileCheck {
+
+	@Override
+	public boolean isLiferaySourceCheck() {
+		return true;
+	}
+
+	@Override
+	protected String doProcess(
+			String fileName, String absolutePath, String content)
+		throws IOException {
+
+		if (!absolutePath.endsWith("/package.json") ||
+			(!absolutePath.contains("/modules/apps/") &&
+			 !absolutePath.contains("/modules/dxp/apps/") &&
+			 !absolutePath.contains("/modules/private/apps/"))) {
+
+			return content;
+		}
+
+		String dirName = absolutePath.substring(0, absolutePath.length() - 12);
+
+		if (!FileUtil.exists(dirName + "build.gradle") &&
+			!FileUtil.exists(dirName + "bnd.bnd")) {
+
+			return content;
+		}
+
+		JSONObject jsonObject = new JSONObject(content);
+
+		if (jsonObject.isNull("scripts")) {
+			return content;
+		}
+
+		JSONObject scriptsJSONObject = jsonObject.getJSONObject("scripts");
+
+		if (!scriptsJSONObject.isNull("build") &&
+			Objects.equals(
+				scriptsJSONObject.get("build"), "liferay-npm-bundler")) {
+
+			return content;
+		}
+
+		_checkIncorrectEntry(fileName, jsonObject, "devDependencies");
+
+		if (absolutePath.contains("/modules/apps/frontend-theme")) {
+			_checkScript(
+				fileName, scriptsJSONObject, "build",
+				"liferay-npm-scripts theme build", false);
+		}
+		else {
+			_checkScript(
+				fileName, scriptsJSONObject, "build",
+				"liferay-npm-scripts build", false);
+		}
+
+		_checkScript(
+			fileName, scriptsJSONObject, "checkFormat",
+			"liferay-npm-scripts check", true);
+		_checkScript(
+			fileName, scriptsJSONObject, "format", "liferay-npm-scripts fix",
+			true);
+
+		return content;
+	}
+
+	private void _checkIncorrectEntry(
+		String fileName, JSONObject jsonObject, String entryName) {
+
+		if (!jsonObject.isNull(entryName)) {
+			addMessage(fileName, "Entry '" + entryName + "' is not allowed");
+		}
+	}
+
+	private void _checkScript(
+		String fileName, JSONObject scriptsJSONObject, String key,
+		String expectedValue, boolean requiredScript) {
+
+		if (scriptsJSONObject.isNull(key)) {
+			if (requiredScript) {
+				addMessage(
+					fileName, "Missing entry '" + key + "' in 'scripts'");
+			}
+
+			return;
+		}
+
+		String value = scriptsJSONObject.getString(key);
+
+		if (!value.contains(expectedValue)) {
+			addMessage(
+				fileName,
+				StringBundler.concat(
+					"Value '", value, "' for entry '", key,
+					"' does not contain '", expectedValue, "'"));
+		}
+	}
+
+}

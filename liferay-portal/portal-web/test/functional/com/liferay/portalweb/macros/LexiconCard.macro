@@ -1,0 +1,98 @@
+definition {
+
+	macro checkCardCheckbox {
+		Click.clickNoWaitForVisible(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_CHECKBOX");
+
+		AssertChecked.assertCheckedNotVisible(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_CHECKBOX");
+	}
+
+	macro clickCard {
+		Click.waitForMenuToggleJSClick(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD");
+	}
+
+	macro clickCardTitle {
+		Click.waitForMenuToggleJSClick(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_TITLE");
+	}
+
+	macro clickCardTitleLink {
+		Click.waitForMenuToggleJSClick(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_TITLE_LINK");
+	}
+
+	macro clickCardWithConfirmation {
+		ClickNoError(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD");
+
+		Confirm();
+	}
+
+	macro clickEllipsisItem {
+		Click.waitForMenuToggleJSClick(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_ELLIPSIS");
+
+		MenuItem.clickNoError(menuItem = "${item}");
+	}
+
+	macro delete {
+		LexiconCard.clickEllipsisItem(
+			card = "${card}",
+			item = "Delete");
+
+		Confirm();
+	}
+
+	macro viewCardLabel {
+		AssertTextEquals(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_LABEL",
+			value1 = "${cardLabel}");
+	}
+
+	macro viewCardNotPresent {
+		AssertElementNotPresent(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD");
+	}
+
+	macro viewCardPresent {
+		AssertVisible(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD");
+	}
+
+	macro viewCardSubtitle {
+		AssertTextEquals(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_SUBTITLE",
+			value1 = "${cardSubtitle}");
+	}
+
+	macro viewCardTitle {
+		AssertTextEquals(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_TITLE",
+			value1 = "${card}");
+	}
+
+	macro viewMenuItemNotPresent {
+		Click(
+			key_card = "${card}",
+			locator1 = "LexiconCard#CARD_ELLIPSIS");
+
+		AssertElementNotPresent(
+			key_menuItem = "${item}",
+			locator1 = "MenuItem#ANY_MENU_ITEM");
+	}
+
+}

@@ -1,0 +1,149 @@
+@import 'atlas-variables';
+@import 'pages';
+
+.stretched-link-layer {
+	position: relative;
+	z-index: 2;
+}
+
+.navigation-bar {
+	width: inherit;
+	.navbar-nav {
+		width: inherit;
+	}
+}
+
+.question-row-article-body {
+	max-height: 8vh;
+}
+
+.questions-title {
+	&:after {
+		background-color: $light-l1;
+		border-radius: 0.25rem;
+		opacity: 0;
+		transition: opacity 300ms ease-in-out;
+		will-change: opacity;
+	}
+
+	&:hover,
+	&:focus {
+		text-decoration: none;
+
+		&:after {
+			opacity: 1;
+		}
+	}
+}
+
+.questions-user {
+	.questions-user-popover {
+		display: none;
+		min-width: 234px;
+		top: 100%;
+	}
+
+	&:hover,
+	&:focus {
+		.questions-user-popover {
+			display: block;
+		}
+	}
+}
+
+.questions-answer {
+	&:not(:first-child) {
+		border-top: 1px solid $secondary-l3;
+	}
+
+	&.questions-answer-success {
+		background-color: $success-l2;
+		border: 1px solid $success-l1;
+		border-radius: 0.25rem;
+	}
+}
+
+.questions-reply {
+	&:not(:first-child) {
+		border-top: 1px solid $secondary-l3;
+		padding-top: 1rem;
+	}
+
+	.questions-reply-icon {
+		transform: rotateZ(180deg);
+	}
+}
+
+.questions-creator:before {
+	background-color: $secondary-l3;
+	bottom: 0;
+	content: '';
+	left: 50%;
+	min-height: 1px;
+	min-width: 1px;
+	position: absolute;
+	top: 0;
+
+	@include media-breakpoint-up(md) {
+		bottom: initial;
+		left: 0;
+		right: 0;
+		top: 50%;
+	}
+}
+
+.questions-button {
+	bottom: 2rem;
+	position: fixed;
+	right: 2rem;
+	z-index: 3;
+}
+
+.questions-actions {
+	@include media-breakpoint-down(md) {
+		bottom: 100%;
+		position: absolute;
+		right: 1rem;
+	}
+}
+
+.questions-card {
+	.card {
+		border-radius: 0.5rem;
+		box-shadow: none;
+		height: 100%;
+		margin-bottom: 0;
+		transition: box-shadow 300ms ease-in-out;
+		will-change: box-shadow;
+	}
+
+	.card-body {
+		padding: 1.5rem;
+	}
+
+	.card-title {
+		font-size: 1.5rem;
+	}
+
+	&:hover,
+	&:focus {
+		.card {
+			box-shadow: 0 1.25rem 2.5rem rgba($dark, 0.16);
+		}
+	}
+}
+
+.questions-navigation-dropdown {
+	@include media-breakpoint-up(xl) {
+		max-width: 400px;
+	}
+	.questions-navigation-section-title {
+		@include media-breakpoint-up(xl) {
+			max-width: 200px;
+		}
+	}
+}
+
+.questions-disabled-link {
+	pointer-events: none;
+}

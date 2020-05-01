@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+description = 'OpenTelemetry Examples for Jaeger Exporter'
+ext.moduleName = "io.opentelemetry.examples.jaeger"
+
+dependencies {
+    compile("io.opentelemetry:opentelemetry-api:${opentelemetryVersion}")
+    compile("io.opentelemetry:opentelemetry-sdk:${opentelemetryVersion}")
+    compile("io.opentelemetry:opentelemetry-exporters-jaeger:${opentelemetryVersion}")
+    compile("io.grpc:grpc-protobuf:1.28.0")
+    compile("io.grpc:grpc-netty-shaded:1.28.0")
+}

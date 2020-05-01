@@ -1,0 +1,14 @@
+@default = "refresh"
+definition {
+
+	function refresh {
+		WaitForSPARefresh();
+
+		selenium.refresh();
+
+		selenium.assertJavaScriptErrors();
+
+		selenium.assertLiferayErrors();
+	}
+
+}
