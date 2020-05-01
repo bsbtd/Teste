@@ -109,9 +109,9 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
 
-charset@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/charset/-/charset-1.0.0.tgz#19327217c249c912e964efbd47f56cc254c348d9"
+charset@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/charset/-/charset-1.0.1.tgz#8d59546c355be61049a8fa9164747793319852bd"
 
 cheerio@0.22.0:
   version "0.22.0"
@@ -682,11 +682,11 @@ on-finished@~2.3.0:
   dependencies:
     ee-first "1.1.1"
 
-open-graph-scraper@^2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/open-graph-scraper/-/open-graph-scraper-2.5.1.tgz#ba0919c0dd8dc5e727d6435702db21613e86580a"
+open-graph-scraper@^2.5.5:
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/open-graph-scraper/-/open-graph-scraper-2.5.5.tgz#a2bb536c429f75832fe6077183ff25400d250022"
   dependencies:
-    charset "1.0.0"
+    charset "1.0.1"
     cheerio "0.22.0"
     iconv-lite "0.4.15"
     jschardet "1.4.2"
