@@ -194,9 +194,9 @@
   dependencies:
     "@types/source-map" "*"
 
-"@types/webpack@^2.2.15":
-  version "2.2.15"
-  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-2.2.15.tgz#4ad7e9b7a51cae736a1dc783f203610c884789ff"
+"@types/webpack@^2.2.16":
+  version "2.2.16"
+  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-2.2.16.tgz#9ca93f468ab3a8eb4b6f45f589acf58c8133aa9b"
   dependencies:
     "@types/node" "*"
     "@types/tapable" "*"
