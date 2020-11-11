@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "autoprefixer": "6.5.3",
+    "autoprefixer": "10.0.2",
     "babel-cli": "6.18.0",
     "babel-core": "6.18.2",
     "babel-loader": "6.2.8",
