@@ -123,7 +123,7 @@
     <log4j.version>2.12.1</log4j.version>
     <mockito.version>1.10.19</mockito.version>
     <pdfbox.version>1.8.16</pdfbox.version>
-    <postgres-jdbc.version>42.2.8</postgres-jdbc.version>
+    <postgres-jdbc.version>42.3.3</postgres-jdbc.version>
     <shiro.version>1.5.0</shiro.version>
     <slf4j.version>1.7.28</slf4j.version>
     <spring.version>5.2.3.RELEASE</spring.version>
