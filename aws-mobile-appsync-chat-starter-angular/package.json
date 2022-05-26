@@ -54,7 +54,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.7.0",
     "@angular/cli": "7.0.3",
-    "@angular/compiler-cli": "~7.2.15",
+    "@angular/compiler-cli": "~13.3.10",
     "@angular/language-service": "7.0.1",
     "@types/chai": "^4.0.10",
     "@types/isomorphic-fetch": "0.0.34",
